@@ -1,0 +1,12 @@
+
+      /\\\		
+     //\\\\	Welcome to Revisions.
+    ////\\\\	
+   ////  \\\\	Use ? to seek help.
+  ////    \\\\
+  \\\\    ////	a .rev folder was created in your current
+   \\\\  ////	directory and will carry all data input
+    \\\\////	submited to Revisions.
+     \\\\//
+      \\\/
+

@@ -1,0 +1,27 @@
+	quit			Quit Revisions.
+	q
+	
+	help			View manual.
+	?
+	
+	test			Test enviroment.
+	
+	list			List scope assets.
+	ls
+
+	checkout		Go up one level.
+	checkout *name*		Dive to asset.
+
+	issue			Add issue.
+	issue *code*		Review issue.
+	issue *code* *state*	Change issue state.
+	
+	user *email*		Add user of given email.
+	user *name*		Review user.
+	user *email* *name*	Change user name.
+	user *email* *pass*	Change user password.
+	logout			Log out of the system.
+	
+	serve			Serve web user interface.
+	
+	flush			Flush data into structure.
