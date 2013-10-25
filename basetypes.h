@@ -128,13 +128,13 @@ class version {
 // DEVELOPER
 //-----------------------------------------------------------------------
 
-class developer {
+class Developer {
 		// STACK OF PROJECTS METHATYPE
-		email* email;
-		dev_name* name;
-		password* password;
-		identifier* identifier;
 	public:
+		email email;
+		dev_name name;
+		password password;
+		identifier identifier;
 };
 
 //-----------------------------------------------------------------------
@@ -155,7 +155,7 @@ class methaproject {
 		char name[16];
 		struct tm opening;
 		struct tm cloding;
-		developer* developer;
+		identifier* dev_identifier;
 		methaproject_states state;
 		
 		//char * getname () {}

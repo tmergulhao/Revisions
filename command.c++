@@ -4,34 +4,9 @@
 #include <iostream>
 using namespace std;
 
-#include "command.h"
-
 #include "tests.h"
 #include "basetypes.h"
-
-class CommandWord {
-	public:
-		char word[50], *walker;
-		int wordcount;
-	
-		CommandWord () {
-			word[0] = word[1] = '\0';
-			walker = NULL;
-			wordcount = 0;
-		}
-		
-		inline char * Str () { return walker; }
-		
-		void Set ();
-		void Nxt ();
-		
-		inline int HasNxt () {
-			return wordcount;
-		}
-		
-		bool operator== (const char * sample);
-		void operator++ ();
-};
+#include "command.h"
 
 void CommandWord::Nxt () {
 	if (walker == NULL) walker = word;
@@ -79,7 +54,11 @@ bool CommandWord::operator== (const char * sample) {
 	return false;
 }
 
-void CommandWord::operator++ () {
+bool CommandWord::operator!= (const char * sample) {
+	return !(*this == sample);
+}
+
+bool CommandWord::operator++ (int) {
 	if (walker == NULL) walker = word;
 	else while (*walker != '\0') walker++;
 	
@@ -87,14 +66,8 @@ void CommandWord::operator++ () {
 	wordcount--;
 	
 	if (*walker == '\0') walker = NULL;
-}
-
-CLTUI::CLTUI () {
-	Word = new class CommandWord;
-}
-
-CLTUI::~CLTUI () {
-	delete Word;
+	
+	return walker;
 }
 
 void CLTUI::PrintScope () {
@@ -111,156 +84,133 @@ void CLTUI::PrintFile (const char * path) {
 	//			" Count:" << hash->value << endl;
 }
 
-void CLTUI::ParseOpt () {
+void CLTUI::GetFields (int mode) {
+	char field[31];
 	
-	if (*Word == "&&") Word->Nxt();
+	// cin >> name;
 	
-	// QUIT
-	if ((*Word == "quit") || (*Word == "q")) {
-		Word->Nxt();
-		if (Word->Str()) {
-			throw SUGEST_MANUAL;
+	if (mode & EMAIL_INPUT) {
+		try {
+			cout << "EMAIL: ";
+			cin.getline(field,31);
+			Dev->email.set(field);
 		}
-		else
-			throw QUIT_APPLICATION;
+		catch (email_error) {
+			cout << "INVALID EMAIL" << endl;
+			GetFields(EMAIL_INPUT);
+		}
+	}
+	
+	if (mode & PASS1_INPUT) {
+		try {
+			cout << "PASSWORD: ";
+			cin.getline(field,31);
+			Dev->password.set(field);
+		}
+		catch (password_error) {
+			cout << "INVALID PASSWORD" << endl;
+			GetFields(PASS1_INPUT);
+		}
+	}
+	
+	if (mode & PASS2_INPUT) {
+		try {
+			cout << "PASSWORD: ";
+			cin.getline(field,31);
+			password->set(field);
+		}
+		catch (password_error) {
+			cout << "INVALID PASSWORD" << endl;
+			GetFields(PASS2_INPUT);
+		}
+	}
+}
+
+void CLTUI::ParseOpt () {
+	// QUIT
+	if (((*Word) == "quit") || ((*Word) == "q")) {
+		if ((*Word)++) throw SUGEST_MANUAL;
+		else throw QUIT_APPLICATION;
+	} else
+	
+	// LOGOUT
+	if ((*Word) == "logout") {
+		cout << "\tUser logged out." << endl;
 	} else
 	
 	// MANUAL
-	if ((*Word == "?") || (*Word == "help")) {
-		Word->Nxt();
-		if (Word->Str()) {
-			throw SUGEST_MANUAL;
-		}
+	if (((*Word) == "?") || ((*Word) == "help")) {
 		throw VIEW_MANUAL;
 	} else
 	
 	// TEST
-	if ((*Word == "test") || (*Word == "tst")) {
-		Word->Nxt();
-		if (*Word == "&&") {
+	if (((*Word) == "test") || ((*Word) == "tst")) {
+		if (!((*Word)++) || (*Word) == "&&")
 			TESTENVIROMENT::instance()->TestTypes->RunTests();
-		} else throw SUGEST_MANUAL;
+		else throw SUGEST_MANUAL;
 	} else
 	
 	// LOGIN
-	if (*Word == "login") {
-		Word->Nxt();
-		if (Word->Str()) {
-			if (*Word == "out")
-				cout << "\tUser logged out." << endl;
-			else throw SUGEST_MANUAL;
-		}
+	if ((*Word) == "login") {
+		(*Word)++;
+		if (Word->Str() && (*Word) != "&&") throw SUGEST_MANUAL;
 		else {
-			cout << "\tEnter user data." << endl << 
-				"\t\tMail:" << endl << 
-				"\t\tPass:" << endl;
-			// interface de ENUM para dados a serem captados
-			//try {
-			//	GetFields(LOGIN);
-			//	MAIL_INPUT & PASS_INPUT
-			//	101000 = 100000 | 001000
-			//}
-			//catch (esc)
-		}
-	} else
-	
-	// SIGN IN
-	if (*Word == "sign") {
-		Word->Nxt();
-		
-		if (*Word == "up") Word->Nxt();
-		
-		if (Word->Str())
-			throw SUGEST_MANUAL;
-		else {
-			cout << "\tEnter user data." << endl << 
-				"\t\tName:" << endl << 
-				"\t\tMail:" << endl << 
-				"\t\tPass:" << endl;
-			// interface de ENUM para dados a serem captados
-			//try {
-			//	GetFields(SIGNUP);
-			//	NAME_INPUT & MAIL_INPUT & PASS_INPUT
-			//	111000 = 100000 | 010000 | 001000
-			//}
-			//catch (esc)
-		}
-	} else
-	
-	// CHANGE PASS
-	if (*Word == "pass" || *Word == "password") {
-		if (Word->HasNxt())
-			throw SUGEST_MANUAL;
-		else {
-			cout << "\tAbout to change password." << endl;
-			// interface de ENUM para dados a serem captados
-			//try {
-			//	GetFields(CHANGE_PASS);
-			//	PASS_INPUT & NAME_INPUT
-			//	001100 = 001000 | 000100
-			//}
-			//catch (esc)
-		}
-	} else
-	
-	// CHAGE NAME
-	if (*Word == "name") {
-		if (Word->HasNxt())
-			throw SUGEST_MANUAL;
-		else {
-			cout << "\tAbout to change name." << endl;
-			// interface de ENUM para dados a serem captados
-			//try {
-			//	GetFields(CHANGE_PASS);
-			//	PASS_INPUT & PASS_INPUT2
-			//	011000 = 010000 | 001000
-			//}
-			//catch (esc)
+			GetFields(	EMAIL_INPUT |
+						PASS1_INPUT);
 		}
 	} else
 	
 	// LIST SCOPE
-	if (*Word == "list" || *Word == "ls") {
-		Word->Nxt();
-		if (!(*Word == "&&"))
+	if (((*Word) == "list") || ((*Word) == "ls")) {
+		if (!((*Word)++) || (*Word) == "&&")
+			cout << "\tList items on scope." << endl;
+		else throw SUGEST_MANUAL;
+	} else
+	
+	// SIGN IN
+	if ((*Word) == "sign") {
+		(*Word)++;
+		
+		if ((*Word) == "up") (*Word)++;
+		
+		if (Word->Str())
 			throw SUGEST_MANUAL;
 		else {
-			cout << "\tList items on scope." << endl;
-			// LIST ITEMS OF SCOPE
+			cout << "\tEnter the new user info." << endl;
+			GetFields(	NAME_INPUT |
+						EMAIL_INPUT |
+						PASS1_INPUT |
+						PASS2_INPUT);
 		}
 	} else
 	
-	// FETCH PRODUCT
-	if (*Word == "product" || *Word == "prod") {
-		Word->Nxt();
-		if (Word->Str()) {
-			cout << "\tSelect product on scope." << endl;
-			// VALIDATE ID
-			// SWITCH TO PRODUCT
-			// SHOW INFO
-		}
-		else
+	// CHANGE PASS
+	if ((*Word) == "pass" || (*Word) == "password") {
+		if (Word->HasNxt())
 			throw SUGEST_MANUAL;
+		else {
+			cout << "\tAbout to change password." << endl;
+			GetFields(	PASS1_INPUT |
+						PASS2_INPUT);
+		}
 	} else
 	
-	// FETCH ISSUE
-	if (*Word == "issue" || *Word == "issue") {
-		Word->Nxt();
-		if (Word->Str()) {
-			cout << "\tSelect issue on scope." << endl;
-			// VALIDATE ID
-			// VALIDATE OPTION
-			// OR SHOW INFO
-		}
-		else
+	// CHAGE NAME
+	if ((*Word) == "name") {
+		if (Word->HasNxt())
 			throw SUGEST_MANUAL;
+		else {
+			cout << "\tAbout to change name." << endl;
+			GetFields(	NAME_INPUT);
+		}
 	} else
 	
 	{
 		if (Word->Str()) throw SUGEST_MANUAL;
 	}
 	
-	if (*Word == "&&") {
+	if ((*Word) == "&&") {
+		(*Word)++;
 		ParseOpt();
 	}
 	
@@ -292,64 +242,3 @@ void CLTUI::Run () {
 		}
 	}
 }
-
-/*
-int main (int argc, char **argv) {
-	char * field1 = new char [1000];
-	char * field2 = new char [1000];
-	password * password1, * password2;
-	
-	sqlite3 *base;
-
-	// cin >> name;
-	
-	cout << "Hello World!";
-
-	try {
-		cin.getline(field1,1000);
-	
-		password1 = new password;
-		password1->set(field1);
-	}
-	catch (password_error error) {
-		if (error == INVALID_SIZE) {
-			cout << "INVALID SIZE\n";
-		}
-		if (error == EQUAL_CHARS) {
-			cout << "INVALID EQUAL\n";
-		}
-	}
-	
-	delete [] field1;
-	
-	try {
-		cin.getline(field2,1000);
-	
-		password2 = new password;
-		password2->set(field2);
-	}
-	catch (password_error error) {
-		if (error == INVALID_SIZE) {
-			cout << "INVALID SIZE\n";
-		}
-		if (error == EQUAL_CHARS) {
-			cout << "INVALID EQUAL\n";
-		}
-	}
-	
-	delete [] field2;
-	
-	try {
-		((*password1) == (*password2));
-	}
-	catch (password_matching status) {
-		if (status == EQUAL) cout << "EQUAL\n";
-		else cout << "NOT_EQUAL\n";
-	}
-
-	delete password1;
-	delete password2;
-
-	return 0;
-}
-*/
