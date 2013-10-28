@@ -35,6 +35,13 @@ void dev_name::set (char * input) {
 	
 	strcpy(value, input);
 }
+void dev_name::set (const char * input) {
+	char * queue = new char [strlen(input) + 1];
+	strcpy(queue, input);
+	set(queue);
+	
+	delete [] queue;
+}
 
 //-----------------------------------------------------------------------
 // EMAIL
@@ -48,29 +55,38 @@ Evaluates if valid and throw exceptions for errors.
 void email::set (char * input) {
 	bool separation = false, queue = false;
 	
-	if (BETWEEN('a',input[0],'z')) {}
+	char * mark = input;
+	
+	if (BETWEEN('a',mark[0],'z')) {}
 	else throw STD_INVALID;
 	
-	while (*input != '\0') {
-		if (BETWEEN('a',input[0],'z') || input[0] == '.' || input[0] == '_' || input[0] == '@') {}
+	while (*mark != '\0') {
+		if (BETWEEN('a',mark[0],'z') || mark[0] == '.' || mark[0] == '_' || mark[0] == '@') {}
 		else throw STD_INVALID;
 		
-		if (input[0] == '@') {
+		if (mark[0] == '@') {
 			if (separation) throw STD_INVALID;
 			separation = true;
 			queue = true;
-		} else if (input[0] == '_' && separation) {
+		} else if (mark[0] == '_' && separation) {
 			throw STD_INVALID;
-		} else if (input[0] == '.') {
+		} else if (mark[0] == '.') {
 			if (queue && separation) throw STD_INVALID;
 			queue = true;
 		} else queue = false;
 		
-		input++;
+		mark++;
 	}
 	if (!separation || queue) throw STD_INVALID;
 	
 	strcpy(value, input);
+}
+void email::set (const char * input) {
+	char * queue = new char [strlen(input) + 1];
+	strcpy(queue, input);
+	set(queue);
+	
+	delete [] queue;
 }
 
 //-----------------------------------------------------------------------
@@ -96,16 +112,21 @@ void password::set (char * input) {
 	
 	strcpy(value, input);
 }
+void password::set (const char * input) {
+	char * queue = new char [strlen(input) + 1];
+	strcpy(queue, input);
+	set(queue);
+	
+	delete [] queue;
+}
 /*!
 Receaves another password type and matches their values in a private enviroment.
 Throws exceptions for values matching or not.
 @param[in]	comparee	The other password for the operator
 */
-void password::operator== (password comparee) {
+bool password::operator== (password comparee) {
 	for (int i = 0; i < 5; i++) if (value[i] != comparee.value[i]) {
-		throw NOT_EQUAL;
-		return;
+		return 0;
 	}
-	throw EQUAL;
-	return;
+	return 1;
 }

@@ -2,7 +2,7 @@ TOPFLAGS = "-lsqlite3 "
 DFLAGS = ""
 EXECFLAGS = ""
 
-task :default => ['main.o',:link, :run]
+task :default => ['main.o',:link, :run, :clean]
 
 task :vanilla_before do
   EXECFLAGS << "--vanilla"
@@ -33,6 +33,7 @@ rule '.o'  => '.c++' do |t|
 end
 
 file 'main.o' => ['main.c++', 'command.o']
-file 'command.o' => ['tests.o', 'command.c++', 'command.h', 'basetypes.o']
+file 'command.o' => ['command.c++', 'command.h', 'basetypes.o', 'tests.o', 'persistence.o']
 file 'test.o' => ['tests.c++','tests.h', 'basetypes.o']
+file 'persistence.o' => ['persistence.c++', 'persistence.h', 'basetypes.o']
 file 'basetypes.o' => ['basetypes.c++', 'basetypes.h']

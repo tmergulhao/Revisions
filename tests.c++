@@ -6,11 +6,8 @@ using namespace std;
 #include "tests.h"
 
 void TestTypes::RightName () {
-	char * sample = new char [31];
-	strcpy (sample,"Tiago Mergulhao");
-	
 	try {
-		dev_name->set(sample);
+		dev_name->set("Tiago Mergulhao");
 	}
 	catch (dev_name_error error) {
 		cout << "!!" << "\t\t" << "RIGHT NAME TEST" << endl;
@@ -19,11 +16,8 @@ void TestTypes::RightName () {
 	cout << "OK" << "\t\t" << "RIGHT NAME TEST" << endl;
 }
 void TestTypes::WrongName () {
-	char * sample = new char [31];
-	strcpy (sample,"Tiago 1");
-	
 	try {
-		dev_name->set(sample);
+		dev_name->set("Tiago 1");
 	}
 	catch (dev_name_error error) {
 		cout << "OK" << "\t\t" << "WRONG NAME TEST" << endl;
@@ -33,11 +27,8 @@ void TestTypes::WrongName () {
 }
 
 void TestTypes::RightEmail () {
-	char * sample = new char [100];
-	strcpy (sample,"me@tmergulhao.com");
-	
 	try {
-		email->set (sample);
+		email->set ("me@tmergulhao.com");
 	}
 	catch (email_error error) {
 		cout << "!!" << "\t\t" << "RIGHT EMAIL TEST" << endl;
@@ -46,11 +37,8 @@ void TestTypes::RightEmail () {
 	cout << "OK" << "\t\t" << "RIGHT EMAIL TEST" << endl;
 }
 void TestTypes::WrongEmail () {
-	char * sample = new char [100];
-	strcpy (sample,"me@.tmergulhao.com");
-	
 	try {
-		email->set (sample);
+		email->set ("me@.tmergulhao.com");
 	}
 	catch (email_error error) {
 		cout << "OK" << "\t\t" << "WRONG EMAIL TEST" << endl;
@@ -60,11 +48,8 @@ void TestTypes::WrongEmail () {
 }
 
 void TestTypes::RightPassword () {
-	char * sample = new char [7];
-	strcpy (sample,"12345");
-	
 	try {
-		password->set (sample);
+		password->set ("12345");
 	}
 	catch (email_error error) {
 		cout << "!!" << "\t\t" << "RIGHT PASSWORD TEST" << endl;
@@ -73,11 +58,8 @@ void TestTypes::RightPassword () {
 	cout << "OK" << "\t\t" << "RIGHT PASSWORD TEST" << endl;
 }
 void TestTypes::WrongPassword_EQUAL () {
-	char * sample = new char [7];
-	strcpy (sample,"12344");
-	
 	try {
-		password->set (sample);
+		password->set ("12344");
 	}
 	catch (password_error error) {
 		
@@ -89,11 +71,8 @@ void TestTypes::WrongPassword_EQUAL () {
 }
 
 void TestTypes::WrongPassword_SIZE () {
-	char * sample = new char [7];
-	strcpy (sample,"1234");
-	
 	try {
-		password->set (sample);
+		password->set ("1234");
 	}
 	catch (password_error error) {
 		
@@ -105,55 +84,23 @@ void TestTypes::WrongPassword_SIZE () {
 }
 
 void TestTypes::MatchPassword () {
-	char sample1 [] = "abcde";
-	char sample2 [] = "abcde";
+	password->set ("abcde");
+	password_second->set("abcde");
 	
-	try {
-		password->set ((char *)&sample1);
-		password_second->set((char *)&sample2);
-		((*password_second) == (*password));
-	}
-	catch (password_matching matching) {
-		if (matching == EQUAL) {
-			cout << "OK" << "\t\t" << "PASSWORD MATCH TEST" << endl;
-			return;
-		}
-		if (matching == NOT_EQUAL) {
-			cout << "!1" << "\t\t" << "PASSWORD MATCH TEST" << endl;
-			return;
-		}
-	}
-	catch (password_error error) {
-		if (error == INVALID_SIZE) cout << "INVALID SIZE";
-		if (error == EQUAL_CHARS) cout << "EQUAL CHARS";
-		return;
-	}
+	if ((*password_second) == (*password)) 
+		cout << "OK" << "\t\t" << "PASSWORD MATCH TEST" << endl;
+	else 
+		cout << "!!" << "\t\t" << "PASSWORD MATCH TEST" << endl;
 }
 
 void TestTypes::NotMatchPassword () {
-	char sample1 [] = "abcde";
-	char sample2 [] = "abcdf";
+	password->set ("abcde");
+	password_second->set("abcdf");
 	
-	try {
-		password->set ((char *)&sample1);
-		password_second->set((char *)&sample2);
-		((*password_second) == (*password));
-	}
-	catch (password_matching matching) {
-		if (matching == EQUAL) {
-			cout << "!1" << "\t\t" << "PASSWORD NO MATCH TEST" << endl;
-			return;
-		}
-		if (matching == NOT_EQUAL) {
-			cout << "OK" << "\t\t" << "PASSWORD NO MATCH TEST" << endl;
-			return;
-		}
-	}
-	catch (password_error error) {
-		if (error == INVALID_SIZE) cout << "INVALID SIZE";
-		if (error == EQUAL_CHARS) cout << "EQUAL CHARS";
-		return;
-	}
+	if ((*password_second) == (*password)) 
+		cout << "!!" << "\t\t" << "PASSWORD MATCH TEST" << endl;
+	else 
+		cout << "OK" << "\t\t" << "PASSWORD MATCH TEST" << endl;
 }
 
 TestTypes::TestTypes () {

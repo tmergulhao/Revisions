@@ -35,6 +35,7 @@ class dev_name {
 		@param[in]	input	Dinamically allocated string
 		*/
 		void set (char *);
+		void set (const char *);
 };
 
 // EMAIL
@@ -60,6 +61,7 @@ class email {
 		@param[in]	input	Dinamically allocated string
 		*/
 		void set (char *);
+		void set (const char *);
 };
 
 // PASSWORD
@@ -71,12 +73,6 @@ typedef enum {
 	INVALID_SIZE,	/**< Different than 5 digits */
 	EQUAL_CHARS		/**< Has matching characters */
 } password_error;
-/**
-* Password matching states
-*/
-typedef enum {
-	NOT_EQUAL = 0, EQUAL = 1
-} password_matching;
 /**
 * \brief Class used to store, match and validate developer passwords.
 */
@@ -92,12 +88,13 @@ class password {
 		@param[in]	input	Dinamically allocated string
 		*/
 		void set (char *);
+		void set (const char *);
 		/*!
 		Receaves another password type and matches their values in a private enviroment.
 		Throws exceptions for values matching or not.
 		@param[in]	comparee	The other password for the operator
 		*/
-		void operator== (password);
+		bool operator== (password);
 };
 
 // IDENTIFIER
