@@ -5,15 +5,17 @@
 
 int main (int argc, char **argv) {
 	if (argc == 2) {
-		if (strcmp(argv[1], "--vanilla") == 0 || strcmp(argv[1], "-v") == 0)
-			MethaUI::instance(CLTMODE | STUBEBASE);
-			// implement --vanilla for stubs STD
+		if (strcmp(argv[1], "--vanilla") == 0 ||
+			strcmp(argv[1], "-v") == 0)
+			USRINTERFACE::instance(CLTMODE);
+		else if (	strcmp(argv[1], "--test") == 0 ||
+					strcmp(argv[1], "-t") == 0)
+			USRINTERFACE::instance(TSTMODE | CLTMODE);
 	}
-	else
-		MethaUI::instance(CLTMODE | STUBEBASE);
 	
-	MethaUI::instance()->Run();
-	// CHECK DEALOCCATION OF ASSETS
+	USRINTERFACE::instance()->Run();
+	
+	delete USRINTERFACE::instance();
 	
 	return 0;
 }

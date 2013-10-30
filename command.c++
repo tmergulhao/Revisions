@@ -3,13 +3,12 @@
 
 #include <iostream>
 using namespace std;
+#define	ctab	"\t"
 
 #include "tests.h"
 #include "basetypes.h"
 #include "command.h"
 #include "main.h"
-
-#define	ctab	"\t"
 
 // COMMAND WORD
 ///////////////
@@ -19,6 +18,13 @@ class CommandWord {
 		char word[1000], *walker;
 		int wordcount;
 	
+		CommandWord (const char * input) {
+			word[0] = word[1] = '\0';
+			walker = NULL;
+			wordcount = 0;
+			
+			Set(input);
+		}
 		CommandWord () {
 			word[0] = word[1] = '\0';
 			walker = NULL;
@@ -28,6 +34,7 @@ class CommandWord {
 		inline char * Str () { return walker; }
 		
 		void Set ();
+		void Set (const char *);
 		
 		bool operator== (const char * sample);
 		bool operator!= (const char * sample);
@@ -35,8 +42,6 @@ class CommandWord {
 };
 
 void CommandWord::Set () {
-	int charcount = 0;
-	
 	wordcount = 0;
 	walker = word;
 	
@@ -50,6 +55,29 @@ void CommandWord::Set () {
 		} else {
 			walker++;
 		}
+	}
+	walker[0] = '\0';
+	walker[1] = '\0';
+	
+	if (walker == word) walker = NULL;
+	else walker = word;
+}
+
+void CommandWord::Set (const char * queue) {
+	wordcount = 0;
+	walker = word;
+	
+	while ((*walker = *queue) != '\n') {
+		if (*walker == ' ') {
+			*walker = '\0';
+			if ((walker > word) && walker[-1] != '\0') {
+				walker ++;
+				wordcount++;
+			}
+		} else {
+			walker++;
+		}
+		queue++;
 	}
 	walker[0] = '\0';
 	walker[1] = '\0';
@@ -108,16 +136,23 @@ class CLTUI: public MethaUI {
 			PrintFile("welcome.txt");
 			
 			SQLInterface::instance(FLAGS);
-	
-			Word = new class CommandWord;
+			
 			Dev = new class Developer;
 			password = new class password;
+			
+			if (FLAGS & TSTMODE) 
+				Word = new class CommandWord ("tst && q");
+			else
+				Word = new class CommandWord;
 		}
 		
 		void Run();
-		void ParseOpt ();
-			void ParseUsr ();
+		
 		void PrintScope ();
+		void ParseOpt ();
+		
+		void ParseUsr ();
+		
 		void PrintFile (const char *);
 		
 		void GetFields (int);
@@ -126,6 +161,9 @@ class CLTUI: public MethaUI {
 			delete Word;
 			delete Dev;
 			delete password;
+			
+			delete SQLINTERFACE::instance();
+			delete TESTENVIROMENT::instance();
 		}
 };
 
@@ -228,7 +266,7 @@ void CLTUI::ParseUsr () {
 			Dev->email.set(Word->Str());
 			GetFields(	PASS1_INPUT);
 			
-			if (SQLInterface::instance()->Login(Dev)) {
+			if (SQLINTERFACE::instance()->Login(Dev)) {
 				cout << ctab << "LOGGED IN" << endl;
 			}
 			else
@@ -255,7 +293,7 @@ void CLTUI::ParseOpt () {
 	
 	if (((*Word) == "test") || ((*Word) == "tst")) {
 		if (!((*Word)++) || (*Word) == "&&")
-			TESTENVIROMENT::instance()->TestTypes->RunTests();
+			TESTENVIROMENT::instance()->RunTests();
 		else throw SUGEST_MANUAL;
 	} else
 	
@@ -283,9 +321,13 @@ void CLTUI::ParseOpt () {
 void CLTUI::Run () {
 	while (true) {
 		try {
-			PrintScope();
-			Word->Set();
-			ParseOpt();
+			if (Word->Str())
+				ParseOpt();
+			else {
+				PrintScope();
+				Word->Set();
+				ParseOpt();
+			}
 		}
 		catch (UI_STATES state) {
 			if (state == QUIT_APPLICATION)
@@ -306,7 +348,17 @@ void CLTUI::Run () {
 MethaUI * MethaUI::p_instance = 0;
 
 MethaUI * MethaUI::instance (int FLAGS) {
+	if (p_instance) delete p_instance;
+	
 	if (FLAGS & CLTMODE)
 		p_instance = new class CLTUI (FLAGS);
+	else
+		p_instance = new class CLTUI (FLAGS);
+	
 	return p_instance;
+}
+
+MethaUI * MethaUI::instance () {
+	if (p_instance) return p_instance;
+	return instance (0);
 }

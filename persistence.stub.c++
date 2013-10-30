@@ -3,19 +3,26 @@
 #include "persistence.h"
 #include "main.h"
 
-// SQLITE INTERFACE
-///////////////////
+// STUB SQLITE EMULATOR
+///////////////////////
 
-class SQLiteBase: public SQLInterface {
+class StubBase: public SQLInterface {
 	private:
 	public:
 		bool Login (Developer *);
-		SQLiteBase () {
-	
+		StubBase () {
+			
 		}
 };
 
-bool SQLiteBase::Login (Developer * developer) { return true; }
+bool StubBase::Login (Developer * developer) {
+	password password;
+	password.set("12345");
+	if ((strcmp(developer->email.value, "me@tmergulhao.com") == 0) &&
+		developer->password == password)
+		return true;
+	return false;
+}
 
 // SINGLETON STATEMENTS
 ///////////////////////
@@ -23,13 +30,7 @@ bool SQLiteBase::Login (Developer * developer) { return true; }
 SQLInterface * SQLInterface::p_instance = 0;
 
 SQLInterface * SQLInterface::instance (int FLAGS) {
-	if (p_instance) delete p_instance;
-	
-	//if (FLAGS & FILEBASE)
-	//	p_instance = new class FileBase;
-	//else
-		p_instance = new class SQLiteBase;
-	
+	if (!p_instance) p_instance = new class StubBase;
 	return p_instance;
 }
 

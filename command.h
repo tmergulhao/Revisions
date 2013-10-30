@@ -6,18 +6,22 @@
 
 #include <stdio.h>
 
+#include <iostream>
+using namespace std;
+#define	ctab	"\t"
+
 class MethaUI {
 		static MethaUI * p_instance;
 	public:
-		virtual void Run () = 0;
+		virtual void Run () {}
 		
 		MethaUI () {}
 		MethaUI (int);
 		
+		virtual ~MethaUI () {}
+		
 		static MethaUI * instance (int);
-		static MethaUI * instance () {
-			return p_instance;
-		}
-};
+		static MethaUI * instance ();
+};typedef class MethaUI USRINTERFACE;
 
 #endif
