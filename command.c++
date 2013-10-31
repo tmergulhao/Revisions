@@ -10,6 +10,30 @@ using namespace std;
 #include "command.h"
 #include "main.h"
 
+// WEB SERVER USER INTERFACE
+////////////////////////////
+
+class WEBUI: public MethaUI {
+		class Developer * Dev;
+		class password * password;
+	public:
+		WEBUI (int FLAGS) {
+			SQLInterface::instance(FLAGS);
+			
+			Dev = new class Developer;
+			password = new class password;
+		}
+		
+		void Run() {}
+		
+		~WEBUI () {
+			delete Dev;
+			delete password;
+			
+			delete SQLINTERFACE::instance();
+		}
+};
+
 // COMMAND WORD
 ///////////////
 
