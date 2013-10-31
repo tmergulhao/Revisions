@@ -12,10 +12,16 @@ int main (int argc, char **argv) {
 					strcmp(argv[1], "-t") == 0)
 			USRINTERFACE::instance(TSTMODE | CLTMODE);
 	}
-	
-	USRINTERFACE::instance()->Run();
-	
-	delete USRINTERFACE::instance();
-	
-	return 0;
+	while (true) {
+		try {
+			USRINTERFACE::instance()->Run();
+		}
+		catch (INITMODES state) {
+			if (state & QUIT_APP) {
+				delete USRINTERFACE::instance();
+				return 0;
+			}
+			USRINTERFACE::instance(state);
+		}
+	}
 }

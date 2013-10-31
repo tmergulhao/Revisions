@@ -55,7 +55,16 @@ class CommandWord {
 			wordcount = 0;
 		}
 		
-		inline char * Str () { return walker; }
+		inline char * Str () {
+			return walker;
+		}
+		inline bool Null () {
+			if (!(Str()) || (*this) == "&&") return true;
+			return false;
+		}
+		inline void Kill () {
+			while (Str()) (*this)++;
+		}
 		
 		void Set ();
 		void Set (const char *);
@@ -123,25 +132,19 @@ bool CommandWord::operator!= (const char * sample) {
 }
 
 bool CommandWord::operator++ (int) {
-	if (walker == NULL) walker = word;
+	if (walker == NULL) return false;
 	else while (*walker != '\0') walker++;
 	
 	walker++;
 	wordcount--;
 	
-	if (*walker == '\0') walker = NULL;
+	if (*walker == '\0') return walker = NULL;
 	
-	return walker;
+	return true;
 }
 
 // COMMAND LINE USER INTERFACE
 //////////////////////////////
-
-typedef enum {
-	QUIT_APPLICATION = 0,
-	VIEW_MANUAL,
-	SUGEST_MANUAL
-} UI_STATES;
 
 typedef enum {
 	NAME_INPUT		= (0x1 << 0),
@@ -176,6 +179,12 @@ class CLTUI: public MethaUI {
 		void ParseOpt ();
 		
 		void ParseUsr ();
+		void ParseHelp ();
+		
+		inline void SuggestManual () {
+			cout << ctab << "Use ? to seek help." << endl;
+			Word->Kill();
+		}
 		
 		void PrintFile (const char *);
 		
@@ -250,12 +259,31 @@ void CLTUI::GetFields (int mode) {
 	}
 }
 
+void CLTUI::ParseHelp() {
+	(*Word)++;
+	
+	if (Word->Null()) {
+		PrintFile("manual.txt");
+		Word->Kill();
+	}
+	else 
+	
+	if (*Word == "new") {
+		cout << ctab << "HELP NEW" << endl;
+	}
+	else SuggestManual();
+	
+	Word->Kill();
+}
+
 void CLTUI::ParseUsr () {
-	if (!((*Word)++) || (*Word) == "&&") {
+	(*Word)++;
+	if (Word->Null()) {
 		cout << ctab << "LOGGED OUT" << endl;
 	} else 
-	if ((*Word) == "new") {
-		if ((*Word)++) {
+	if (*Word == "new") {
+		(*Word)++;
+		if (!(Word->Null())) {
 			try {
 				Dev->email.set(Word->Str());
 				GetFields(	NAME_INPUT |
@@ -268,11 +296,12 @@ void CLTUI::ParseUsr () {
 				cout << ctab << "INVALID EMAIL" << endl;
 			}
 		}
-		else throw SUGEST_MANUAL;
+		else SuggestManual();
 	} else 
 	
-	if ((*Word) == "rm") {
-		if ((*Word)++) {
+	if (*Word == "rm") {
+		(*Word)++;
+		if (!(Word->Null())) {
 			try {
 				Dev->email.set(Word->Str());
 				cout << ctab << "USER REMOVED" << endl;
@@ -282,7 +311,7 @@ void CLTUI::ParseUsr () {
 				cout << ctab << "INVALID EMAIL" << endl;
 			}
 		}
-		else throw SUGEST_MANUAL;
+		else SuggestManual();
 	} else 
 	
 	{
@@ -305,63 +334,55 @@ void CLTUI::ParseUsr () {
 }
 
 void CLTUI::ParseOpt () {
-	if (((*Word) == "quit") || ((*Word) == "q")) {
-		if ((*Word)++) throw SUGEST_MANUAL;
-		else throw QUIT_APPLICATION;
-	} else
-	
-	if (((*Word) == "?") || ((*Word) == "help")) {
-		throw VIEW_MANUAL;
+	if ((*Word == "quit") || 
+		(*Word == "q")) {
 		(*Word)++;
+		if (Word->Str()) SuggestManual();
+		else throw QUIT_APP;
 	} else
 	
-	if (((*Word) == "test") || ((*Word) == "tst")) {
-		if (!((*Word)++) || (*Word) == "&&")
+	if ((*Word == "?") || 
+		(*Word == "help") || 
+		(*Word == "man") || 
+		(*Word == "manual")) ParseHelp();
+	else
+	
+	if ((*Word == "test") || 
+		(*Word == "tst")) {
+		(*Word)++;
+		if (Word->Null())
 			TESTENVIROMENT::instance()->RunTests();
-		else throw SUGEST_MANUAL;
+		else SuggestManual();
 	} else
 	
-	if (((*Word) == "list") || ((*Word) == "ls")) {
-		if (!((*Word)++) || (*Word) == "&&")
+	if ((*Word == "list") || 
+		(*Word == "ls")) {
+		(*Word)++;
+		if (Word->Null())
 			cout << ctab << "List items on scope." << endl;
-		else throw SUGEST_MANUAL;
+		else SuggestManual();
 	} else
 	
 	// USER ACTIONS
-	if (((*Word) == "usr") || ((*Word) == "user")) ParseUsr();
+	if ((*Word == "usr") || 
+		(*Word == "user")) ParseUsr();
 	
 	else
 	
 	{
-		if (Word->Str()) throw SUGEST_MANUAL;
+		if (Word->Str()) SuggestManual();
 	}
 	
-	if ((*Word) == "&&") {
-		(*Word)++;
-		ParseOpt();
-	}
+	if (Word->Null()) (*Word)++;
 }
 
 void CLTUI::Run () {
 	while (true) {
-		try {
-			if (Word->Str())
-				ParseOpt();
-			else {
-				PrintScope();
-				Word->Set();
-				ParseOpt();
-			}
-		}
-		catch (UI_STATES state) {
-			if (state == QUIT_APPLICATION)
-				return;
-		
-			else if (state == VIEW_MANUAL)
-				PrintFile("manual.txt");
-		
-			else if (state == SUGEST_MANUAL)
-				cout << ctab << "Use ? to seek help." << endl;
+		if (Word->Str())
+			ParseOpt();
+		else {
+			PrintScope();
+			Word->Set();
 		}
 	}
 }
@@ -378,6 +399,8 @@ MethaUI * MethaUI::instance (int FLAGS) {
 		p_instance = new class CLTUI (FLAGS);
 	else
 		p_instance = new class CLTUI (FLAGS);
+		//p_instance = new class WEBUI (FLAGS);
+		//p_instance = new class OSXUI (FLAGS);
 	
 	return p_instance;
 }
