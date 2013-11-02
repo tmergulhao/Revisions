@@ -6,45 +6,65 @@
 
 #define	BETWEEN(X,Y,Z)		(Y >= X && Y <= Z)
 
+#define NAME_SIZE	30
+#define EMAIL_SIZE	60
+#define PASS_SIZE	5
+
 //-----------------------------------------------------------------------
 // BASIC TYPES
 //-----------------------------------------------------------------------
 
-// DEVELOPER NAME
+// BASE TYPE
+////////////
 
 /**
-* Errors in developer naming
-*/
-typedef enum {
-	NUMBERS,	/**< Using numbers */
-	NULL_NAME,	/**< Empty string */
-	TOO_BIG		/**< Bigger than 30 digits */
-} dev_name_error;
-
-class basetype {
+*	\brief Classe base que contém os métodos virtuais necessários para a
+*	definição de tipo básico.
+*	
+*	Os construtores de cada classe são reponsáveis por alocar o tamanho
+*	máximo do vetor que estão definidos neste cabeçalho.
+**/
+class BaseType {
 	public:
+		/**
+		*	\brief Ponteiro de char para a alocação do espaço necessário
+		*	a cada tipo básico.
+		**/
 		char * value;
 		
-		/*!
+		/**
 		*	\brief Recebe e valida valor.
+		*	
 		*	Recebe ponteiro para constante ou caracter.
 		*	Avalia validez da entrada e lança exceção apropriada.
 		*	@param[in]	input	Ponteiro de vetor de caracteres.
-		*/
+		**/
 		virtual void set (char * input) = 0;
 		virtual void set (const char * input) = 0;
 };
 
+// DEVELOPER NAME
+/////////////////
+
+/**
+* Erros de validação de nome
+**/
+typedef enum {
+	NUMBERS,	// < Uso de números
+	NULL_NAME,	// < Vazio
+	TOO_BIG		// < Maior que tamanho definido
+} dev_name_error;
 /**
 *	\brief Classe com alocação e avaliação de valores para nome de desenvolvedor.
+*	
 *	Avalia o nome quanto ao comprimento padrão, 15 dígitos que sejam:
 *	* letras do alfabeto sem acentuação maiúsculas ou minúsculas;
 *	* espaços.
-*/
-class dev_name : public basetype {
+**/
+class dev_name : public BaseType {
 	public:
 		dev_name () {
-			value = new char [16];
+			value = new char [NAME_SIZE+1];
 		}
 		~dev_name () {
 			delete [] value;
@@ -55,23 +75,23 @@ class dev_name : public basetype {
 };
 
 // EMAIL
+////////
 
 /**
-* Errors in email validation
-*/
+* Erros de validação de email
+**/
 typedef enum {
-	STD_INVALID	/**< Invalid password */
+	STD_INVALID	// < Email invalido
 } email_error;
 /**
-* \brief Class used to store and validate developer emails.
-*/
-class email : public basetype {
+*	\brief Classe com alocação e avaliação de valores para email de desenvolvedor.
+*	
+*	Avalia o email ao comprimento máximo e aos padrões regulares de endereço.
+**/
+class email : public BaseType {
 	public:
-		/**
-		* \brief The pointer to the dinamically allocated character string
-		*/
 		email () {
-			value = new char [60];
+			value = new char [EMAIL_SIZE+1];
 		}
 		~email () {
 			delete [] value;
@@ -82,26 +102,26 @@ class email : public basetype {
 };
 
 // PASSWORD
+///////////
 
 /**
-* Errors in password validation
-*/
+* Erros de validação de senha
+**/
 typedef enum {
-	INVALID_SIZE,	/**< Different than 5 digits */
-	EQUAL_CHARS		/**< Has matching characters */
+	INVALID_SIZE,	// < Tamanho inválido
+	EQUAL_CHARS		// < Caracteres coincidentes
 } password_error;
 /**
-* \brief Class used to store, match and validate developer passwords.
-*/
-class password : public basetype {
-		/**
-		* \brief O array de valores caracter com largura 5 mais 1 de finalização
-		*/
-		//char value [6];
+*	\brief Classe com alocação e avaliação de valores para senha de desenvolvedor.
+*	
+*	Avalia a senha quanto ao comprimento padrão, 5 dígitos que sejam:
+*	* números e letras do alfabeto sem acentuação maiúsculas ou minúsculas;
+*	* caracteres não repetentes.
+**/
+class password : public BaseType {
 	public:
 		password () {
- 			// 5 digits
- 			value = new char [6];
+ 			value = new char [PASS_SIZE+1];
  		}
  		~password () {
  			delete [] value;
@@ -109,118 +129,6 @@ class password : public basetype {
 		
 		void set (char *);
 		void set (const char *);
-};
-
-// IDENTIFIER
-
-class identifier {
-		char * value;
-	public:
-		identifier () {
-			// 4 digits
-			value = new char [5];
-			// generares value
-		}
-		identifier (char * input) {
-			// 4 digits
-			value = new char [5];
-			// validates value
-		}
-		~identifier () {
-			delete value;
-		}
-		int get() {return 0001;}
-};
-
-// VERSION
-
-class version {
-		char * value;
-	public:
-		//version () {
-		//	for (int i = 0; i < 4; i++) value[i] = '0';
-		//		value[4] = '\0';
-		//}
-		version () {
-			// 4 digits
-			value = new char [5];
-			// generares value
-		}
-		~version () {
-			delete value;
-		}
-		
-		void set (char *) {}
-		void get() {}
-};
-
-//-----------------------------------------------------------------------
-// DEVELOPER
-//-----------------------------------------------------------------------
-
-class Developer {
-		// STACK OF PROJECTS METHATYPE
-	public:
-		email email;
-		dev_name name;
-		password password;
-		identifier identifier;
-};
-
-//-----------------------------------------------------------------------
-// BASE
-//-----------------------------------------------------------------------
-
-// ABSTRACT PROJECT CLASS
-
-typedef enum {
-	UNCONFIRMED = 0,
-	CONFIRMED,
-	REPAIRING, // only for issues
-	DONE
-} methaproject_states;
-
-class methaproject {
-	protected:
-		char name[16];
-		struct tm opening;
-		struct tm cloding;
-		identifier* dev_identifier;
-		methaproject_states state;
-		
-		//char * getname () {}
-		//char * getid () {}
-		//struct tm getopening () {}
-		//struct tm getclosing () {}
-		//char * getdescription () {}
-		//char * getdev () {}
-		// ...
-};
-
-// DEFECT
-
-class defect: public methaproject {
-		int votes; // de 0 a 100
-		char description[31];
-		identifier* identifier;
-};
-
-// PRODUCT
-
-class product: public methaproject {
-		// STACK OF DEFECTS
-		char version[]; // XX.YY
-};
-
-// PROJECT OR DATABASE
-
-class project: public methaproject {
-		// STACK OF PRODUCTS
-		// STACK OF DEVELOPERS
-		// DATABASE CONNECTIONS AND INTERFACES
-	public:
-		//product () {}		// call for database stablishment
-		// ~product () {}	// dumps data on to database
 };
 
 #endif
