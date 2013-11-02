@@ -9,10 +9,10 @@ using namespace std;
 class TestTypes {
 		static class TestTypes * p_instance;
 		
-		dev_name* dev_name;
-		email* email;
-		class password* password;
-		class password* password_second;
+		dev_name * dev_name;
+		email * email;
+		password * password_first;
+		password * password_second;
 	public:
 		TestTypes();
 		~TestTypes();
@@ -45,7 +45,7 @@ TestTypes * TestTypes::p_instance = 0;
 TestTypes::TestTypes () {
 	dev_name = new class dev_name;
 	email = new class email;
-	password = new class password;
+	password_first = new class password;
 	password_second = new class password;
 }
 void TestTypes::RunTests () {
@@ -64,7 +64,7 @@ void TestTypes::RunTests () {
 TestTypes::~TestTypes () {
 	delete dev_name;
 	delete email;
-	delete password;
+	delete password_first;
 	delete password_second;
 }
 
@@ -112,7 +112,7 @@ void TestTypes::WrongEmail () {
 
 void TestTypes::RightPassword () {
 	try {
-		password->set ("12345");
+		password_first->set ("12345");
 	}
 	catch (email_error error) {
 		cout << "!!" << ctab << ctab << "RIGHT PASSWORD TEST" << endl;
@@ -122,7 +122,7 @@ void TestTypes::RightPassword () {
 }
 void TestTypes::WrongPassword_EQUAL () {
 	try {
-		password->set ("12344");
+		password_first->set ("12344");
 	}
 	catch (password_error error) {
 		
@@ -132,10 +132,9 @@ void TestTypes::WrongPassword_EQUAL () {
 	}
 	cout << "!!" << ctab << ctab << "WRONG PASSWORD EQUAL TEST" << endl;
 }
-
 void TestTypes::WrongPassword_SIZE () {
 	try {
-		password->set ("1234");
+		password_first->set ("1234");
 	}
 	catch (password_error error) {
 		
@@ -145,22 +144,22 @@ void TestTypes::WrongPassword_SIZE () {
 	}
 	cout << "!!" << ctab << ctab << "WRONG PASSWORD SIZE TEST" << endl;
 }
-
 void TestTypes::MatchPassword () {
-	password->set ("abcde");
+	password_first->set ("abcde");
 	password_second->set("abcde");
 	
-	if ((*password_second) == (*password)) 
+	if ((strcmp(password_first->value, password_second->value) == 0)) 
 		cout << "OK" << ctab << ctab << "PASSWORD MATCH TEST" << endl;
 	else 
 		cout << "!!" << ctab << ctab << "PASSWORD MATCH TEST" << endl;
 }
-
 void TestTypes::NotMatchPassword () {
-	password->set ("abcde");
+	password_first->set ("abcde");
 	password_second->set("abcdf");
 	
-	if ((*password_second) == (*password)) 
+	
+	
+	if ((strcmp(password_first->value, password_second->value) == 0)) 
 		cout << "!!" << ctab << ctab << "PASSWORD MATCH TEST" << endl;
 	else 
 		cout << "OK" << ctab << ctab << "PASSWORD MATCH TEST" << endl;

@@ -100,7 +100,9 @@ void CommandWord::Set (const char * queue) {
 	wordcount = 0;
 	walker = word;
 	
-	while ((*walker = *queue) != '\n') {
+	int size = strlen(queue);
+	
+	while ((*walker = *queue) != '\n' && size) {
 		if (*walker == ' ') {
 			*walker = '\0';
 			if ((walker > word) && walker[-1] != '\0') {
@@ -111,6 +113,7 @@ void CommandWord::Set (const char * queue) {
 			walker++;
 		}
 		queue++;
+		size--;
 	}
 	walker[0] = '\0';
 	walker[1] = '\0';
@@ -247,7 +250,7 @@ void CLTUI::GetFields (int mode) {
 			cin.getline(field,31);
 			password->set(field);
 			
-			if (!(Dev->password == *password)) {
+			if (strcmp(Dev->password.value, password->value)) {
 				cout << ctab << "PASSWORDS NOT MATCHIN" << endl;
 				GetFields(PASS2_INPUT);
 			}
@@ -337,7 +340,9 @@ void CLTUI::ParseOpt () {
 	if ((*Word == "quit") || 
 		(*Word == "q")) {
 		(*Word)++;
-		if (Word->Str()) SuggestManual();
+		if (Word->Str()) {
+			SuggestManual();
+		}
 		else throw QUIT_APP;
 	} else
 	

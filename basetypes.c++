@@ -99,34 +99,22 @@ Evaluates if valid and throw exceptions for errors.
 @param[in]	input	Dinamically allocated string
 */
 void password::set (char * input) {
-	int name_size = 0, pull = 0;
-	
 	if (strlen(input) != 5) throw INVALID_SIZE;
 	
 	for (int i = 0; i < 5; i++)
 		for (int j = i+1; j < 5; j++)
-			if (input[i] == input[j]) {
+			if (input[i] == input[j])
 				throw EQUAL_CHARS;
-				return;
-			}
 	
 	strcpy(value, input);
 }
 void password::set (const char * input) {
-	char * queue = new char [strlen(input) + 1];
+	if (strlen(input) != 5) throw INVALID_SIZE;
+	
+	char * queue = new char [6];
 	strcpy(queue, input);
+	
 	set(queue);
 	
 	delete [] queue;
-}
-/*!
-Receaves another password type and matches their values in a private enviroment.
-Throws exceptions for values matching or not.
-@param[in]	comparee	The other password for the operator
-*/
-bool password::operator== (password comparee) {
-	for (int i = 0; i < 5; i++) if (value[i] != comparee.value[i]) {
-		return 0;
-	}
-	return 1;
 }

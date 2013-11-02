@@ -20,20 +20,36 @@ typedef enum {
 	NULL_NAME,	/**< Empty string */
 	TOO_BIG		/**< Bigger than 30 digits */
 } dev_name_error;
-/**
-* \brief Class used to store and validate developer names.
-*/
-class dev_name {
+
+class basetype {
 	public:
-		/**
-		* \brief The pointer to the dinamically allocated character string
-		*/
-		char value [16];
+		char * value;
+		
 		/*!
-		Receaves dinamically allocated string, purges the previous value and assigns the new one.
-		Evaluates if valid and throw exceptions for errors.
-		@param[in]	input	Dinamically allocated string
+		*	\brief Recebe e valida valor.
+		*	Recebe ponteiro para constante ou caracter.
+		*	Avalia validez da entrada e lança exceção apropriada.
+		*	@param[in]	input	Ponteiro de vetor de caracteres.
 		*/
+		virtual void set (char * input) = 0;
+		virtual void set (const char * input) = 0;
+};
+
+/**
+*	\brief Classe com alocação e avaliação de valores para nome de desenvolvedor.
+*	Avalia o nome quanto ao comprimento padrão, 15 dígitos que sejam:
+*	* letras do alfabeto sem acentuação maiúsculas ou minúsculas;
+*	* espaços.
+*/
+class dev_name : public basetype {
+	public:
+		dev_name () {
+			value = new char [16];
+		}
+		~dev_name () {
+			delete [] value;
+		}
+		
 		void set (char *);
 		void set (const char *);
 };
@@ -49,17 +65,18 @@ typedef enum {
 /**
 * \brief Class used to store and validate developer emails.
 */
-class email {
+class email : public basetype {
 	public:
 		/**
 		* \brief The pointer to the dinamically allocated character string
 		*/
-		char value[60];
-		/*!
-		Receaves dinamically allocated string, purges the previous value and assigns the new one.
-		Evaluates if valid and throw exceptions for errors.
-		@param[in]	input	Dinamically allocated string
-		*/
+		email () {
+			value = new char [60];
+		}
+		~email () {
+			delete [] value;
+		}
+		
 		void set (char *);
 		void set (const char *);
 };
@@ -76,34 +93,41 @@ typedef enum {
 /**
 * \brief Class used to store, match and validate developer passwords.
 */
-class password {
+class password : public basetype {
 		/**
 		* \brief O array de valores caracter com largura 5 mais 1 de finalização
 		*/
-		char value[6];
+		//char value [6];
 	public:
-		/*!
-		Receaves dinamically allocated string, purges the previous value and assigns the new one.
-		Evaluates if valid and throw exceptions for errors.
-		@param[in]	input	Dinamically allocated string
-		*/
+		password () {
+ 			// 5 digits
+ 			value = new char [6];
+ 		}
+ 		~password () {
+ 			delete [] value;
+ 		}
+		
 		void set (char *);
 		void set (const char *);
-		/*!
-		Receaves another password type and matches their values in a private enviroment.
-		Throws exceptions for values matching or not.
-		@param[in]	comparee	The other password for the operator
-		*/
-		bool operator== (password);
 };
 
 // IDENTIFIER
 
 class identifier {
-		int value;  // 4 digits
+		char * value;
 	public:
 		identifier () {
-			// GENERATE VALUE
+			// 4 digits
+			value = new char [5];
+			// generares value
+		}
+		identifier (char * input) {
+			// 4 digits
+			value = new char [5];
+			// validates value
+		}
+		~identifier () {
+			delete value;
 		}
 		int get() {return 0001;}
 };
@@ -111,12 +135,21 @@ class identifier {
 // VERSION
 
 class version {
-		char value[5];
+		char * value;
 	public:
+		//version () {
+		//	for (int i = 0; i < 4; i++) value[i] = '0';
+		//		value[4] = '\0';
+		//}
 		version () {
-			for (int i = 0; i < 4; i++) value[i] = '0';
-				value[4] = '\0';
+			// 4 digits
+			value = new char [5];
+			// generares value
 		}
+		~version () {
+			delete value;
+		}
+		
 		void set (char *) {}
 		void get() {}
 };
