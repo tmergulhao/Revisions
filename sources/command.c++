@@ -19,7 +19,7 @@ class WEBUI: public MethaUI {
 		class password * password;
 	public:
 		WEBUI (int FLAGS) {
-			SQLInterface::instance(FLAGS);
+			CONTROLLER::instance(FLAGS);
 			
 			Dev = new class Developer;
 			password = new class password;
@@ -31,7 +31,7 @@ class WEBUI: public MethaUI {
 			delete Dev;
 			delete password;
 			
-			delete SQLINTERFACE::instance();
+			delete CONTROLLER::instance();
 		}
 };
 
@@ -191,7 +191,7 @@ class CLTUI: public MethaUI {
 		CLTUI (int FLAGS) {
 			PrintFile("welcome.txt");
 			
-			SQLInterface::instance(FLAGS);
+			CONTROLLER::instance(FLAGS);
 			
 			Dev = new class Developer;
 			password = new class password;
@@ -224,7 +224,7 @@ class CLTUI: public MethaUI {
 			delete Dev;
 			delete password;
 			
-			delete SQLINTERFACE::instance();
+			delete CONTROLLER::instance();
 			delete TESTENVIROMENT::instance();
 		}
 };
@@ -348,7 +348,7 @@ void CLTUI::ParseUsr () {
 			Dev->email.set(Word->Str());
 			GetFields(	PASS1_INPUT);
 			
-			if (SQLINTERFACE::instance()->Login(Dev)) {
+			if (CONTROLLER::instance()->Login(Dev)) {
 				cout << ctab << "LOGGED IN" << endl;
 			}
 			else

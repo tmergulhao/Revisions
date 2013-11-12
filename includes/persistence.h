@@ -5,30 +5,19 @@
 
 #include <entities.h>
 
+typedef enum {
+	CONNECT,	// < Erro de conexão
+	DISCONNECT,	// < Erro de desconexão
+	RUNTIME		// < Erro na execução
+} sql_error;
+
 class SQLInterface {
 		static SQLInterface * p_instance;
 	public:
-		// USER
-		// VALIDATE DEVELOPER LOGIN
-		virtual bool Login (Developer *) { return 0; }
-		
-		// CHANGES DEVELOPER DATA
-		//virtual bool ChangeUser (Developer *) = 0;
-		
-		// PRODUCT
-		// STARTS NEW PRODUCT
-		//virtual bool NewProduct (methaproject *) = 0;
-		// SWITCHES PRODUCT STATE
-		//virtual bool ChangeState (methaproject_states) = 0;
-		
-		// ISSUE
-		// STARTS NEW ISSUE
-		//virtual bool NewIssue (methaproject *, methaproject *) = 0;
-		// SWITCHES PRODUCT STATE
-		//virtual bool ChangeState (product *, methaproject_states) = 0;
-		
-		// SWITCHES ISSUE STATE
-		//virtual bool ChangeState (defect *, methaproject_states) = 0;
+		// virtual Develper * Find (Develper *);
+		// virtual void Add (Develper *);
+		// virtual void Update (Develper *);
+		// virtual void Remove (Develper *);
 		
 		SQLInterface () {}
 		SQLInterface (int);
