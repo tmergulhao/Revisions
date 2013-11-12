@@ -37,33 +37,42 @@ class WEBUI: public MethaUI {
 // COMMAND WORD
 ///////////////
 
+#define WORDNUMBER	30
+#define WORDLENGTH	30
+
 class CommandWord {
 	public:
-		char word[1000], *walker;
-		int wordcount;
+		char *word[WORDNUMBER], *walker;
 	
 		CommandWord (const char * input) {
-			word[0] = word[1] = '\0';
-			walker = NULL;
-			wordcount = 0;
-			
+			Allocate();
 			Set(input);
 		}
 		CommandWord () {
-			word[0] = word[1] = '\0';
-			walker = NULL;
-			wordcount = 0;
+			Allocate();
+		}
+		~CommandWord () {
+			for (int i = 0; i < WORDNUMBER; i++) {
+				delete word[i];
+			}
+		}
+		
+		inline void Allocate () {
+			for (int i = 0; i < WORDNUMBER; i++) {
+				word[i] = new char [WORDLENGTH];
+			}
+			*(word[0]) = '\0';
 		}
 		
 		inline char * Str () {
 			return walker;
 		}
 		inline bool Null () {
-			if (!(Str()) || (*this) == "&&") return true;
+			if (walker == NULL || (*this) == "&&") return true;
 			return false;
 		}
 		inline void Kill () {
-			while (Str()) (*this)++;
+			walker = NULL;
 		}
 		
 		void Set ();
@@ -75,39 +84,44 @@ class CommandWord {
 };
 
 void CommandWord::Set () {
-	wordcount = 0;
-	walker = word;
+	int wordcount = 0;
+	walker = *word;
 	
 	while ((*walker = getchar()) != '\n') {
 		if (*walker == ' ') {
-			*walker = '\0';
-			if ((walker > word) && walker[-1] != '\0') {
-				walker ++;
+			if (walker == word[wordcount]) {}
+			else {
+				*walker = '\0';
 				wordcount++;
+				walker = word[wordcount];
 			}
 		} else {
 			walker++;
 		}
 	}
-	walker[0] = '\0';
-	walker[1] = '\0';
+	*walker = '\0';
 	
-	if (walker == word) walker = NULL;
-	else walker = word;
+	for (wordcount = wordcount+1; wordcount < WORDNUMBER; wordcount++) {
+		*(word[wordcount]) = '\0';
+	}
+	
+	if (walker == *word) walker = NULL;
+	else walker = word[0];
 }
 
 void CommandWord::Set (const char * queue) {
-	wordcount = 0;
-	walker = word;
+	int wordcount = 0;
+	walker = *word;
 	
 	int size = strlen(queue);
 	
 	while ((*walker = *queue) != '\n' && size) {
 		if (*walker == ' ') {
-			*walker = '\0';
-			if ((walker > word) && walker[-1] != '\0') {
-				walker ++;
+			if (walker == word[wordcount]) {}
+			else {
+				*walker = '\0';
 				wordcount++;
+				walker = word[wordcount];
 			}
 		} else {
 			walker++;
@@ -115,11 +129,14 @@ void CommandWord::Set (const char * queue) {
 		queue++;
 		size--;
 	}
-	walker[0] = '\0';
-	walker[1] = '\0';
+	*walker = '\0';
 	
-	if (walker == word) walker = NULL;
-	else walker = word;
+	for (wordcount = wordcount+1; wordcount < WORDNUMBER; wordcount++) {
+		*(word[wordcount]) = '\0';
+	}
+	
+	if (walker == *word) walker = NULL;
+	else walker = word[0];
 }
 
 bool CommandWord::operator== (const char * sample) {
@@ -136,10 +153,18 @@ bool CommandWord::operator!= (const char * sample) {
 
 bool CommandWord::operator++ (int) {
 	if (walker == NULL) return false;
-	else while (*walker != '\0') walker++;
 	
-	walker++;
-	wordcount--;
+	int i;
+	
+	for (i = 0; walker != word[i]; i++) {
+		if (*(word[i]) == '\0') return walker = NULL;
+	}
+	
+	if (i == WORDNUMBER-1) {
+		return walker = NULL;
+	}
+	
+	walker = word[i+1];
 	
 	if (*walker == '\0') return walker = NULL;
 	
