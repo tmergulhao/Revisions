@@ -1,47 +1,41 @@
-TOPFLAGS = "-lsqlite3 "
-DFLAGS = ""
 EXECFLAGS = ""
-TESTINGUNITS = "basetypes.c++"
-
-task :default => ['main.o',:link_run, :clean]
-
-task :stub_before do
-  sh "g++ -c #{DFLAGS} persistence.stub.c++"
-  sh "mv persistence.stub.o persistence.o"
-end
-task :stub => [:stub_before, :default, :clean]
-
-task :vanilla_before do
-  EXECFLAGS << "--vanilla"
-end
-task :vanilla => [:vanilla_before,:default, :clean]
-
-task :cover_before do
-	DFLAGS << "-fprofile-arcs " << "-ftest-coverage "
-	EXECFLAGS = "--test"
-end
-task :cover => [:cover_before, 'main.o', :link_run, :clean] do
-  sh "gcov #{TESTINGUNITS}"
-end
-
-task :link_run do
-  sh "g++ *.o #{TOPFLAGS}#{DFLAGS}-o compiled.out"
-  sh "./compiled.out #{EXECFLAGS}"
-end
+TOPFLAGS = "-lsqlite3"
 
 task :clean do
-  sh "rm *.o *.out"
-  if DFLAGS != ""
-    sh "rm *.gcov *.gcda *.gcno"
-  end
+  sh "rm objects/* revisions"
 end
 
-rule '.o'  => '.c++' do |t|
-	sh "g++ -c #{DFLAGS} #{t.source}"
+task :default => ['main.o', :link, :run]
+
+task :stub do
+  Rake::Task['command.o'].prerequisites.replace(
+      ['entities.o', 'tests.o', 'controller.stub.o'] )
 end
 
-file 'main.o' => ['main.c++', 'command.o']
-file 'command.o' => ['command.c++', 'command.h', 'basetypes.o', 'tests.o', 'persistence.o']
-file 'persistence.o' => ['persistence.c++','persistence.h', 'basetypes.o']
-file 'test.o' => ['tests.c++','tests.h', 'basetypes.o']
-file 'basetypes.o' => ['basetypes.c++', 'basetypes.h']
+task :test => [:stub] do
+  EXECFLAGS << "--test"
+  Rake::Task[:default].invoke
+end
+
+task :link do
+  sh "g++ #{TOPFLAGS} objects/*.o -o revisions"
+end
+
+task :run do
+  sh "./revisions #{EXECFLAGS}"
+end
+
+rule '.o' do |t|
+  sh "g++ -c -Iincludes sources/#{t.name.chop.chop}.c++ -o objects/#{t.name}"
+end
+
+file 'main.o' => ['command.o']
+
+file 'command.o' => ['entities.o', 'tests.o', 'controller.o']
+file 'controller.o' => ['persistence.o', 'entities.o']
+file 'controller.stub.o' => ['persistence.o', 'entities.o']
+
+file 'tests.o' => ['entities.o']
+file 'persistence.o' => ['entities.o']
+file 'entities.o' => ['basetypes.o']
+file 'basetypes.o'
