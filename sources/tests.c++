@@ -4,7 +4,8 @@
 using namespace std;
 #define	ctab	"\t"
 
-#include "tests.h"
+#include <tests.h>
+#include <entities.h>
 
 class TestTypes {
 		static class TestTypes * p_instance;

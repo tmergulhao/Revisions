@@ -3,7 +3,7 @@
 
 #include <sqlite3.h>
 
-#include "basetypes.h"
+#include <entities.h>
 
 class SQLInterface {
 		static SQLInterface * p_instance;

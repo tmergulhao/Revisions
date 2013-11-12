@@ -1,7 +1,8 @@
 #include <string.h>
 
-#include "persistence.h"
-#include "main.h"
+#include <entities.h>
+#include <persistence.h>
+#include <main.h>
 
 // SQLITE INTERFACE
 ///////////////////

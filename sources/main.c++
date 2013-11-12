@@ -1,7 +1,7 @@
 #include <string.h>
 
-#include "command.h"
-#include "main.h"
+#include <command.h>
+#include <main.h>
 
 int main (int argc, char **argv) {
 	if (argc == 2) {

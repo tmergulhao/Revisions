@@ -1,8 +1,8 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#include "basetypes.h"
-#include "persistence.h"
+#include <basetypes.h>
+#include <controller.h>
 
 #include <stdio.h>
 

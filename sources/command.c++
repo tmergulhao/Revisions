@@ -5,10 +5,11 @@
 using namespace std;
 #define	ctab	"\t"
 
-#include "tests.h"
-#include "basetypes.h"
-#include "command.h"
-#include "main.h"
+#include <tests.h>
+#include <entities.h>
+#include <controller.h>
+#include <command.h>
+#include <main.h>
 
 // WEB SERVER USER INTERFACE
 ////////////////////////////

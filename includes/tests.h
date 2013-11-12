@@ -1,8 +1,6 @@
 #ifndef TESTS_H
 #define TESTS_H
 
-#include "basetypes.h"
-
 class TestingEnviroment {
 		static class TestingEnviroment * p_instance;
 	public:
