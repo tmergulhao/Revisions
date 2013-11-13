@@ -1,13 +1,23 @@
-#include <string.h>
-
-#include <entities.h>
-#include <persistence.h>
-#include <main.h>
-
+// C++ Libs
+///////////
 #include <list>
 #include <iostream>
 #include <string>
 using namespace std;
+
+// ANSI C Libs
+//////////////
+#include <string.h>
+
+// External Libs
+////////////////
+#include <sqlite3.h>
+
+// Local Libs
+/////////////
+#include <main.h>
+#include <entities.h>
+#include <persistence.h>
 
 // SQLITE INTERFACE
 ///////////////////

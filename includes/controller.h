@@ -1,8 +1,8 @@
 #ifndef CONSTROLLER_H
 #define CONSTROLLER_H
 
-#include <sqlite3.h>
-
+// Local Libs
+/////////////
 #include <entities.h>
 
 class Controller {

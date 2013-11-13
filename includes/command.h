@@ -1,15 +1,6 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#include <basetypes.h>
-#include <controller.h>
-
-#include <stdio.h>
-
-#include <iostream>
-using namespace std;
-#define	ctab	"\t"
-
 class MethaUI {
 		static MethaUI * p_instance;
 	public:

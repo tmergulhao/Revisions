@@ -1,15 +1,22 @@
+// C++ Libs
+///////////
+#include <iostream>
+using namespace std;
+
+// ANSI C Libs
+//////////////
 #include <string.h>
 #include <stdbool.h>
 
-#include <iostream>
-using namespace std;
-#define	ctab	"\t"
-
-#include <tests.h>
+// Local Libs
+/////////////
+#include <main.h>
 #include <entities.h>
+#include <tests.h>
 #include <controller.h>
 #include <command.h>
-#include <main.h>
+
+#define	ctab	"\t"
 
 // WEB SERVER USER INTERFACE
 ////////////////////////////
@@ -252,7 +259,7 @@ void CLTUI::GetFields (int mode) {
 			cin.getline(field,31);
 			Dev->name.set(field);
 		}
-		catch (dev_name_error) {
+		catch (invalid_argument error) {
 			cout << ctab << "INVALID NAME" << endl;
 			GetFields(NAME_INPUT);
 		}
@@ -264,7 +271,7 @@ void CLTUI::GetFields (int mode) {
 			cin.getline(field,31);
 			Dev->password.set(field);
 		}
-		catch (password_error) {
+		catch (invalid_argument error) {
 			cout << ctab << "INVALID PASSWORD" << endl;
 			GetFields(PASS1_INPUT);
 		}
@@ -281,7 +288,7 @@ void CLTUI::GetFields (int mode) {
 				GetFields(PASS2_INPUT);
 			}
 		}
-		catch (password_error) {
+		catch (invalid_argument error) {
 			cout << ctab << "INVALID PASSWORD" << endl;
 			GetFields(PASS2_INPUT);
 		}
@@ -321,7 +328,7 @@ void CLTUI::ParseUsr () {
 				cout << ctab << "USER ADDED" << endl;
 				(*Word)++;
 			}
-			catch (email_error) {
+			catch (invalid_argument error) {
 				cout << ctab << "INVALID EMAIL" << endl;
 			}
 		}
@@ -336,7 +343,7 @@ void CLTUI::ParseUsr () {
 				cout << ctab << "USER REMOVED" << endl;
 				(*Word)++;
 			}
-			catch (email_error) {
+			catch (invalid_argument error) {
 				cout << ctab << "INVALID EMAIL" << endl;
 			}
 		}
@@ -356,7 +363,7 @@ void CLTUI::ParseUsr () {
 			
 			(*Word)++;
 		}
-		catch (email_error) {
+		catch (invalid_argument error) {
 			cout << ctab << "INVALID EMAIL" << endl;
 		}
 	}

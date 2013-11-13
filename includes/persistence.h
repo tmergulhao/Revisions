@@ -1,10 +1,6 @@
 #ifndef PERSISTENCE_H
 #define PERSISTENCE_H
 
-#include <sqlite3.h>
-
-#include <entities.h>
-
 typedef enum {
 	CONNECT,	// < Erro de conexão
 	DISCONNECT,	// < Erro de desconexão

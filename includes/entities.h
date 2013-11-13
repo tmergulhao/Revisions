@@ -1,9 +1,13 @@
 #ifndef ENTITIES_H
 #define ENTITIES_H
 
-#include <stdbool.h>
-#include <time.h>
+// ANSI C Libs
+//////////////
+//#include <stdbool.h>
+//#include <time.h>
 
+// Local Libs
+/////////////
 #include <basetypes.h>
 
 //-----------------------------------------------------------------------

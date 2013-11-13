@@ -1,8 +1,10 @@
 #ifndef BASICTYPES_H
 #define BASICTYPES_H
 
-#include <stdbool.h>
-#include <time.h>
+// C++ Libs
+///////////
+#include <stdexcept>
+using namespace std;
 
 #define	BETWEEN(X,Y,Z)		(Y >= X && Y <= Z)
 
@@ -39,21 +41,13 @@ class BaseType {
 		*	Avalia validez da entrada e lança exceção apropriada.
 		*	@param[in]	input	Ponteiro de vetor de caracteres.
 		**/
-		virtual void set (char * input) = 0;
-		virtual void set (const char * input) = 0;
+		virtual void set (char * input) throw (invalid_argument) = 0;
+		virtual void set (const char * input) throw (invalid_argument) = 0;
 };
 
 // DEVELOPER NAME
 /////////////////
 
-/**
-* Erros de validação de nome
-**/
-typedef enum {
-	NUMBERS,	// < Uso de números
-	NULL_NAME,	// < Vazio
-	TOO_BIG		// < Maior que tamanho definido
-} dev_name_error;
 /**
 *	\brief Classe com alocação e avaliação de valores para nome de desenvolvedor.
 *	
@@ -70,19 +64,13 @@ class dev_name : public BaseType {
 			delete [] value;
 		}
 		
-		void set (char *);
-		void set (const char *);
+		void set (char *) throw (invalid_argument);
+		void set (const char *) throw (invalid_argument);
 };
 
 // EMAIL
 ////////
 
-/**
-* Erros de validação de email
-**/
-typedef enum {
-	STD_INVALID	// < Email invalido
-} email_error;
 /**
 *	\brief Classe com alocação e avaliação de valores para email de desenvolvedor.
 *	
@@ -97,20 +85,13 @@ class email : public BaseType {
 			delete [] value;
 		}
 		
-		void set (char *);
-		void set (const char *);
+		void set (char *) throw (invalid_argument);
+		void set (const char *) throw (invalid_argument);
 };
 
 // PASSWORD
 ///////////
 
-/**
-* Erros de validação de senha
-**/
-typedef enum {
-	INVALID_SIZE,	// < Tamanho inválido
-	EQUAL_CHARS		// < Caracteres coincidentes
-} password_error;
 /**
 *	\brief Classe com alocação e avaliação de valores para senha de desenvolvedor.
 *	
@@ -127,8 +108,8 @@ class password : public BaseType {
  			delete [] value;
  		}
 		
-		void set (char *);
-		void set (const char *);
+		void set (char *) throw (invalid_argument);
+		void set (const char *) throw (invalid_argument);
 };
 
 #endif

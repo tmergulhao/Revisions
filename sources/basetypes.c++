@@ -1,6 +1,13 @@
+// ANSI C Libs
+//////////////
 #include <string.h>
 
+// Local Libs
+/////////////
 #include <basetypes.h>
+
+#define ALPHA(X)		(BETWEEN('a',X,'z')||BETWEEN('A',X,'Z'))
+#define ALPHANUM(X)		(ALPHA(X)||BETWEEN('0',X,'9'))
 
 //-----------------------------------------------------------------------
 // DEVELOPER NAMES
@@ -11,7 +18,7 @@ Receaves dinamically allocated string, purges the previous value and assigns the
 Evaluates if valid and throw exceptions for errors.
 @param[in]	input	Dinamically allocated string
 */
-void dev_name::set (char * input) {
+void dev_name::set (char * input) throw (invalid_argument) {
 	int name_size = 0, pull = 0;
 	
 	if (input[0] == ' ') {
@@ -19,8 +26,8 @@ void dev_name::set (char * input) {
 		input[0] = input[1];
 	}
 	while (*input != '\0') {
-		if (BETWEEN('a',input[0],'z') || BETWEEN('A',input[0],'Z') || input[0] == ' ') {}
-		else throw NUMBERS;
+		if (ALPHA(input[0]) || input[0] == ' ') {}
+		else throw invalid_argument("NUMBERS");
 		
 		if (input[0] == ' ' && input[pull+1] == ' ') pull++;
 		
@@ -29,13 +36,13 @@ void dev_name::set (char * input) {
 		
 		if (pull) input[0] = input[pull];
 	}
-	if (name_size == 0) throw NULL_NAME;
+	if (name_size == 0) throw invalid_argument("NULL NAME");
 	
-	if (strlen(input) > 15) throw TOO_BIG;
+	if (strlen(input) > 15) throw invalid_argument("SIZE OVERFLOW");
 	
 	strcpy(value, input);
 }
-void dev_name::set (const char * input) {
+void dev_name::set (const char * input) throw (invalid_argument) {
 	char * queue = new char [strlen(input) + 1];
 	strcpy(queue, input);
 	set(queue);
@@ -52,36 +59,36 @@ Receaves dinamically allocated string, purges the previous value and assigns the
 Evaluates if valid and throw exceptions for errors.
 @param[in]	input	Dinamically allocated string
 */
-void email::set (char * input) {
+void email::set (char * input) throw (invalid_argument) {
 	bool separation = false, queue = false;
 	
 	char * mark = input;
 	
-	if (BETWEEN('a',mark[0],'z')) {}
-	else throw STD_INVALID;
+	if (ALPHANUM(mark[0])) {}
+	else throw invalid_argument("STARTS WITH NON ALPHANUMBER");
 	
 	while (*mark != '\0') {
-		if (BETWEEN('a',mark[0],'z') || mark[0] == '.' || mark[0] == '_' || mark[0] == '@') {}
-		else throw STD_INVALID;
+		if (ALPHANUM(mark[0]) || mark[0] == '.' || mark[0] == '_' || mark[0] == '@') {}
+		else throw invalid_argument("INVALID CHAR");
 		
 		if (mark[0] == '@') {
-			if (separation) throw STD_INVALID;
+			if (separation) throw invalid_argument("TWO AT SIGNS");
 			separation = true;
 			queue = true;
 		} else if (mark[0] == '_' && separation) {
-			throw STD_INVALID;
+			throw invalid_argument("NON ALPHA ON DOMAIN PATH");
 		} else if (mark[0] == '.') {
-			if (queue && separation) throw STD_INVALID;
+			if (queue && separation) throw invalid_argument("NO TOP DOMAIN");
 			queue = true;
 		} else queue = false;
 		
 		mark++;
 	}
-	if (!separation || queue) throw STD_INVALID;
+	if (!separation || queue) throw invalid_argument("NO DOMAIN");
 	
 	strcpy(value, input);
 }
-void email::set (const char * input) {
+void email::set (const char * input) throw (invalid_argument) {
 	char * queue = new char [strlen(input) + 1];
 	strcpy(queue, input);
 	set(queue);
@@ -98,18 +105,20 @@ Receaves dinamically allocated string, purges the previous value and assigns the
 Evaluates if valid and throw exceptions for errors.
 @param[in]	input	Dinamically allocated string
 */
-void password::set (char * input) {
-	if (strlen(input) != 5) throw INVALID_SIZE;
+void password::set (char * input) throw (invalid_argument) {
+	if (strlen(input) != 5) throw invalid_argument("INVALID SIZE");
 	
-	for (int i = 0; i < 5; i++)
-		for (int j = i+1; j < 5; j++)
-			if (input[i] == input[j])
-				throw EQUAL_CHARS;
+	for (int i = 0; i < 5; i++) {
+		if (!ALPHANUM(input[i])) throw invalid_argument("NON ALPHANUMBER");
+		for (int j = i+1; j < 5; j++) {
+			if (input[i] == input[j]) throw invalid_argument("EQUAL CHARS");
+		}
+	}
 	
 	strcpy(value, input);
 }
-void password::set (const char * input) {
-	if (strlen(input) != 5) throw INVALID_SIZE;
+void password::set (const char * input) throw (invalid_argument) {
+	if (strlen(input) != 5) throw invalid_argument("INVALID SIZE");
 	
 	char * queue = new char [6];
 	strcpy(queue, input);

@@ -73,7 +73,7 @@ void TestTypes::RightName () {
 	try {
 		dev_name->set("Tiago Mergulhao");
 	}
-	catch (dev_name_error error) {
+	catch (invalid_argument error) {
 		cout << "!!" << ctab << ctab << "RIGHT NAME TEST" << endl;
 		return;
 	}
@@ -83,7 +83,7 @@ void TestTypes::WrongName () {
 	try {
 		dev_name->set("Tiago 1");
 	}
-	catch (dev_name_error error) {
+	catch (invalid_argument error) {
 		cout << "OK" << ctab << ctab << "WRONG NAME TEST" << endl;
 		return;
 	}
@@ -94,7 +94,7 @@ void TestTypes::RightEmail () {
 	try {
 		email->set ("me@tmergulhao.com");
 	}
-	catch (email_error error) {
+	catch (invalid_argument error) {
 		cout << "!!" << ctab << ctab << "RIGHT EMAIL TEST" << endl;
 		return;
 	}
@@ -104,7 +104,7 @@ void TestTypes::WrongEmail () {
 	try {
 		email->set ("me@.tmergulhao.com");
 	}
-	catch (email_error error) {
+	catch (invalid_argument error) {
 		cout << "OK" << ctab << ctab << "WRONG EMAIL TEST" << endl;
 		return;
 	}
@@ -115,7 +115,7 @@ void TestTypes::RightPassword () {
 	try {
 		password_first->set ("12345");
 	}
-	catch (email_error error) {
+	catch (invalid_argument error) {
 		cout << "!!" << ctab << ctab << "RIGHT PASSWORD TEST" << endl;
 		return;
 	}
@@ -125,9 +125,9 @@ void TestTypes::WrongPassword_EQUAL () {
 	try {
 		password_first->set ("12344");
 	}
-	catch (password_error error) {
+	catch (invalid_argument error) {
 		
-		if (error == EQUAL_CHARS)
+		if (strcmp(error.what(),"EQUAL CHARS") == 0)
 			cout << "OK" << ctab << ctab << "WRONG PASSWORD EQUAL TEST" << endl;
 		return;
 	}
@@ -137,9 +137,9 @@ void TestTypes::WrongPassword_SIZE () {
 	try {
 		password_first->set ("1234");
 	}
-	catch (password_error error) {
+	catch (invalid_argument error) {
 		
-		if (error == INVALID_SIZE)
+		if (strcmp(error.what(),"INVALID SIZE") == 0)
 			cout << "OK" << ctab << ctab << "WRONG PASSWORD SIZE TEST" << endl;
 		return;
 	}

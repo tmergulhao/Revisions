@@ -14,10 +14,8 @@ class StubController: public Controller {
 };
 
 bool StubController::Login (Developer * developer) {
-	password password;
-	password.set("12345");
 	if ((strcmp(developer->email.value, "me@tmergulhao.com") == 0) &&
-		(strcmp(developer->password.value, password.value) == 0))
+		(strcmp(developer->password.value, "12345") == 0))
 		return true;
 	return false;
 }

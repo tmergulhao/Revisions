@@ -1,7 +1,16 @@
+// ANSI C Libs
+//////////////
 #include <string.h>
 
-#include "persistence.h"
-#include "main.h"
+// External Libs
+////////////////
+#include <sqlite3.h>
+
+// Local Libs
+/////////////
+#include <main.h>
+#include <entities.h>
+#include <persistence.h>
 
 // STUB SQLITE EMULATOR
 ///////////////////////
