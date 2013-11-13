@@ -1,6 +1,6 @@
-// ANSI C Libs
-//////////////
-#include <string.h>
+// C++ Libs
+///////////
+#include <string>
 
 // External Libs
 ////////////////
@@ -14,28 +14,21 @@
 
 // STUB SQLITE EMULATOR
 ///////////////////////
-
 class StubBase: public SQLInterface {
 	private:
 	public:
-		bool Login (Developer *);
-		StubBase () {
-			
-		}
+		string GetPassword (string);
+		StubBase () {}
+		~StubBase () {}
 };
 
-bool StubBase::Login (Developer * developer) {
-	password password;
-	password.set("12345");
-	if ((strcmp(developer->email.value, "me@tmergulhao.com") == 0) &&
-		developer->password == password)
-		return true;
-	return false;
+string StubBase::GetPassword (string email) {
+	string password = "12345";
+	return password;
 }
 
 // SINGLETON STATEMENTS
 ///////////////////////
-
 SQLInterface * SQLInterface::p_instance = 0;
 
 SQLInterface * SQLInterface::instance (int FLAGS) {

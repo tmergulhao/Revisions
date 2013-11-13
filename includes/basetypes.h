@@ -4,6 +4,7 @@
 // C++ Libs
 ///////////
 #include <stdexcept>
+#include <string>
 using namespace std;
 
 #define	BETWEEN(X,Y,Z)		(Y >= X && Y <= Z)
@@ -32,7 +33,7 @@ class BaseType {
 		*	\brief Ponteiro de char para a alocação do espaço necessário
 		*	a cada tipo básico.
 		**/
-		char * value;
+		string value;
 		
 		/**
 		*	\brief Recebe e valida valor.
@@ -43,6 +44,7 @@ class BaseType {
 		**/
 		virtual void set (char * input) throw (invalid_argument) = 0;
 		virtual void set (const char * input) throw (invalid_argument) = 0;
+		virtual string get () = 0;
 };
 
 // DEVELOPER NAME
@@ -57,15 +59,9 @@ class BaseType {
 **/
 class dev_name : public BaseType {
 	public:
-		dev_name () {
-			value = new char [NAME_SIZE+1];
-		}
-		~dev_name () {
-			delete [] value;
-		}
-		
 		void set (char *) throw (invalid_argument);
 		void set (const char *) throw (invalid_argument);
+		string get () { return value; }
 };
 
 // EMAIL
@@ -78,15 +74,9 @@ class dev_name : public BaseType {
 **/
 class email : public BaseType {
 	public:
-		email () {
-			value = new char [EMAIL_SIZE+1];
-		}
-		~email () {
-			delete [] value;
-		}
-		
 		void set (char *) throw (invalid_argument);
 		void set (const char *) throw (invalid_argument);
+		string get () { return value; }
 };
 
 // PASSWORD
@@ -101,15 +91,9 @@ class email : public BaseType {
 **/
 class password : public BaseType {
 	public:
-		password () {
- 			value = new char [PASS_SIZE+1];
- 		}
- 		~password () {
- 			delete [] value;
- 		}
-		
 		void set (char *) throw (invalid_argument);
 		void set (const char *) throw (invalid_argument);
+		string get () { return value; }
 };
 
 #endif

@@ -1,22 +1,36 @@
+// C++ Libs
+///////////
+#include <string>
+#include <stdexcept>
+using namespace std;
+
+// ANSI C Libs
+//////////////
 #include <string.h>
 
-#include <controller.h>
+// Local Libs
 #include <main.h>
+#include <entities.h>
+#include <persistence.h>
+#include <controller.h>
 
-// STUB SQLITE EMULATOR
-///////////////////////
-
+// CONTROLLER
+/////////////
 class StubController: public Controller {
 	private:
 	public:
-		bool Login (Developer *);
+		bool Login (Developer *) throw (invalid_argument);
 		StubController () {}
 };
 
-bool StubController::Login (Developer * developer) {
-	if ((strcmp(developer->email.value, "me@tmergulhao.com") == 0) &&
-		(strcmp(developer->password.value, "12345") == 0))
-		return true;
+bool StubController::Login (Developer * developer) throw (invalid_argument) {
+	string password = SQLINTERFACE::instance()->GetPassword(developer->email.value);
+	
+	if (password == "NULL") {
+		throw invalid_argument("SQL RETURNED NULL FIELD");
+	}
+	
+	if (developer->password.get().compare(password) == 0) return true;
 	return false;
 }
 

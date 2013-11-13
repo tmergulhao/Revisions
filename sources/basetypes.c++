@@ -40,7 +40,9 @@ void dev_name::set (char * input) throw (invalid_argument) {
 	
 	if (strlen(input) > 15) throw invalid_argument("SIZE OVERFLOW");
 	
-	strcpy(value, input);
+	string queue_str(input);
+	
+	value =  queue_str;
 }
 void dev_name::set (const char * input) throw (invalid_argument) {
 	char * queue = new char [strlen(input) + 1];
@@ -86,7 +88,9 @@ void email::set (char * input) throw (invalid_argument) {
 	}
 	if (!separation || queue) throw invalid_argument("NO DOMAIN");
 	
-	strcpy(value, input);
+	string queue_str(input);
+	
+	value =  queue_str;
 }
 void email::set (const char * input) throw (invalid_argument) {
 	char * queue = new char [strlen(input) + 1];
@@ -115,7 +119,9 @@ void password::set (char * input) throw (invalid_argument) {
 		}
 	}
 	
-	strcpy(value, input);
+	string queue_str(input);
+	
+	value =  queue_str;
 }
 void password::set (const char * input) throw (invalid_argument) {
 	if (strlen(input) != 5) throw invalid_argument("INVALID SIZE");

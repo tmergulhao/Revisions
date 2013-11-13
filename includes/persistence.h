@@ -1,19 +1,13 @@
 #ifndef PERSISTENCE_H
 #define PERSISTENCE_H
 
-typedef enum {
-	CONNECT,	// < Erro de conexão
-	DISCONNECT,	// < Erro de desconexão
-	RUNTIME		// < Erro na execução
-} sql_error;
-
 class SQLInterface {
 		static SQLInterface * p_instance;
 	public:
-		// virtual Develper * Find (Develper *);
-		// virtual void Add (Develper *);
-		// virtual void Update (Develper *);
-		// virtual void Remove (Develper *);
+		virtual string GetPassword (string) {
+			string NULL_STR = "NULL";
+			return NULL_STR;
+		}
 		
 		SQLInterface () {}
 		SQLInterface (int);

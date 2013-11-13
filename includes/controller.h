@@ -8,7 +8,7 @@
 class Controller {
 		static Controller * p_instance;
 	public:
-		virtual bool Login (Developer *) { return 0; }
+		virtual bool Login (Developer *) throw (invalid_argument) { return 0; }
 		
 		Controller () {}
 		Controller (int);

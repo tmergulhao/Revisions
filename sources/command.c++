@@ -283,7 +283,7 @@ void CLTUI::GetFields (int mode) {
 			cin.getline(field,31);
 			password->set(field);
 			
-			if (strcmp(Dev->password.value, password->value)) {
+			if (Dev->password.value.compare(password->value)) {
 				cout << ctab << "PASSWORDS NOT MATCHIN" << endl;
 				GetFields(PASS2_INPUT);
 			}

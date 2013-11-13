@@ -149,7 +149,7 @@ void TestTypes::MatchPassword () {
 	password_first->set ("abcde");
 	password_second->set("abcde");
 	
-	if ((strcmp(password_first->value, password_second->value) == 0)) 
+	if (password_first->value.compare(password_second->value) == 0) 
 		cout << "OK" << ctab << ctab << "PASSWORD MATCH TEST" << endl;
 	else 
 		cout << "!!" << ctab << ctab << "PASSWORD MATCH TEST" << endl;
@@ -158,9 +158,7 @@ void TestTypes::NotMatchPassword () {
 	password_first->set ("abcde");
 	password_second->set("abcdf");
 	
-	
-	
-	if ((strcmp(password_first->value, password_second->value) == 0)) 
+	if (password_first->value.compare(password_second->value) == 0) 
 		cout << "!!" << ctab << ctab << "PASSWORD MATCH TEST" << endl;
 	else 
 		cout << "OK" << ctab << ctab << "PASSWORD MATCH TEST" << endl;

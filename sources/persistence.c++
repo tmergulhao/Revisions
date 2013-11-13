@@ -22,59 +22,61 @@ using namespace std;
 // SQLITE INTERFACE
 ///////////////////
 
-/*
-list<ElementoResultado> SQLiteBase::listaResultado;
-
 class ElementoResultado {
 	private:
 	        string nomeColuna;
 	        string valorColuna;
 	public:
-		void ElementoResultado::setNomeColuna(const string& nomeColuna) {
+		void setNomeColuna(const string& nomeColuna) {
 		        this->nomeColuna = nomeColuna;
 		}
-		void ElementoResultado::setValorColuna(const string& valorColuna){
+		void setValorColuna(const string& valorColuna){
 		        this->valorColuna = valorColuna;
 		}
-		inline string ElementoResultado::getNomeColuna() const {
+		inline string getNomeColuna() const {
 		        return nomeColuna;
 		}
 	
-		inline string ElementoResultado::getValorColuna() const {
+		inline string getValorColuna() const {
 		        return valorColuna;
 		}
 };
-*/
+
 class SQLiteBase: public SQLInterface {
 	private:
 		sqlite3 *base;
 		int rc;
+		char * msg;
 	protected:
-		//static list<ElementoResultado> listaResultado;
-		//string comandoSQL;
+		static list<ElementoResultado> listaResultado;
+		string command;
 	public:
 		bool Login (Developer *);
+		
 		SQLiteBase () {
-			//rc = sqlite3_open("revisionsdb", &base);
+			rc = sqlite3_open("revisionsdb", &base);
 			// if (sqlite3_open(nomeBancoDados, &bd) != SQLITE_OK)
-			//if (rc != SQLITE_OK)
-			//	throw CONNECT;
-		}
-		~SQLiteBase () {
-			//rc = sqlite3_close(base);
-			// if (sqlite3_close(bd) != SQLITE_OK)
-			//if (rc != SQLITE_OK)
-			//	throw DISCONNECT;
-		}
-		/*
-		void Run () {
-			rc = sqlite3_exec(base, comandoSQL.c_str(), callback, 0, &mensagem);
-			// if (sqlite3_exec(bd, comandoSQL.c_str(), callback, 0, &mensagem) != SQLITE_OK)
 			if (rc != SQLITE_OK)
-				throw RUNTIME;
+				throw invalid_argument("NOT ABLE TO STABLISH SQL CONNECTION");
 		}
 		
-		int callback(void *NotUsed, int argc, char **valorColuna, char **nomeColuna){
+		~SQLiteBase () {
+			rc = sqlite3_close(base);
+			// if (sqlite3_close(bd) != SQLITE_OK)
+			if (rc != SQLITE_OK)
+				throw invalid_argument("NOT ABLE TO KILL SQL CONNECTION");
+		}
+		
+		void Run () {
+			cout << "PROCEDURE 1";
+			
+			rc = sqlite3_exec(base, command.c_str(), SQLcallback, 0, &msg);
+			// if (sqlite3_exec(base, command.c_str(), SQLcallback, 0, &msg) != SQLITE_OK)
+			if (rc != SQLITE_OK)
+				throw invalid_argument("RUNTIME ERROR ON SQL");
+		}
+		
+		static int SQLcallback(void *NotUsed, int argc, char **valorColuna, char **nomeColuna){
 			NotUsed=0;
 			ElementoResultado elemento;
 			for(int i = 0; i < argc; i++){
@@ -84,8 +86,26 @@ class SQLiteBase: public SQLInterface {
 			}
 			return 0;
 		}
-		*/
-};
+		
+		string GetPassword (string email) {
+			string password;
+			ElementoResultado resultado;
+			
+			command = "SELECT password FROM developers WHERE email = ";
+			command += email;
+			
+			Run();
+			
+			cout << "PROCEDURE 2";
+	        if (listaResultado.empty())
+	                throw invalid_argument("EMPTY LIST");
+	        resultado = listaResultado.back();
+	        listaResultado.pop_back();
+	        password = resultado.getValorColuna();
+			
+			return password;
+		}
+}; list<ElementoResultado> SQLiteBase::listaResultado;
 
 // SINGLETON STATEMENTS
 ///////////////////////
