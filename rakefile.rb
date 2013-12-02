@@ -2,18 +2,13 @@ EXECFLAGS = ""
 TOPFLAGS = "-lsqlite3"
 
 task :clean do
-  sh "rm objects/* revisions"
+  sh "rm objects/* revisions persistence.base"
 end
 
-task :default => [:stub, 'main.o', :link, :run]
-
-task :stub do
-  Rake::Task['controller.o'].prerequisites.replace(
-      ['persistence.stub.o', 'entities.o'] )
-end
+task :default => ['main.o', :link, :run]
 
 task :test => [:stub] do
-  EXECFLAGS << "--test"
+  EXECFLAGS << "test"
   Rake::Task[:default].invoke
 end
 
