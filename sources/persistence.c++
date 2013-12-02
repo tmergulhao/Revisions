@@ -681,7 +681,7 @@ class SQLiteBase: public SQLInterface {
 		////////////////////
 		void AddCandidade (Defect defect, Developer developer) {
 			command = "INSERT INTO candidates VALUES (";
-			command += "'" + defect.id_code.get() + "'";
+			command += "'" + defect.id_code.get() + "' ,";
 			command += "'" + developer.email.get() + "'";
 			command += ")";
 			
@@ -690,7 +690,6 @@ class SQLiteBase: public SQLInterface {
 		bool IsCandidade (Defect defect, Developer developer) {
 			command = "SELECT * FROM candidates WHERE issue = ";
 			command += "'" + defect.id_code.get() + "'";
-			command += ")";
 			
 			Run();
 			
@@ -712,7 +711,6 @@ class SQLiteBase: public SQLInterface {
 		void WipeCandidades (Defect defect) {
 			command = "DELETE FROM candidates ";
 			command += "WHERE issue = '" + defect.id_code.get() + "'";
-			command += ")";
 			
 			Run();
 		}

@@ -104,7 +104,7 @@ void Controller::EditProductVersion (Product product) {
 	SQLINTERFACE::instance()->UpdateProductVersion(product);
 }
 void Controller::AssignDevProduct (Developer developer, Product product) {
-	if (SQLINTERFACE::instance()->HasDeveloper(developer.email))
+	if (! SQLINTERFACE::instance()->HasDeveloper(developer.email))
 		throw invalid_argument("NO SUCH DEVELOPER");
 	if (! SQLINTERFACE::instance()->IsOwner(scope_user.email))
 		throw invalid_argument ("ONLY ADMIN CAN EDIT PRODUCT");

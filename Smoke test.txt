@@ -1,0 +1,233 @@
+# SMOKE TEST
+
+---
+
+## SISTEMA
+
+### Iniciar e entrar no sistema
+
+Para iniciar o sistema simplesmente execute o arquivo **revisions**
+
+- o terminal retornará o início da sessão e iniciará um banco de dados
+- pedirá um email, nome e senha para o usuário mestre do projeto
+	
+```
+INITIATE ADMIN USER
+EMAIL: me@tmergulhao.com
+NAME: Tiago Mergulhao
+PASSWORD: 12345
+```
+
+```
+LOG INTO REVISIONS
+EMAIL: me@tmergulhao.com
+PASSWORD: 12345
+```
+
+### Adicionar outro usuário
+
+```
+tmergulhao > developer add
+EMAIL: admin@admin.c
+NAME: System Admin
+PASSWORD: 12345
+PASSWORD: 12345
+	USER ADDED
+```
+
+### Passar administração
+
+```
+tmergulhao > project assign
+EMAIL: admin@admin.c
+	NEW ADMINISTRATOR ASSIGNED
+```
+
+### Sair
+
+```
+tmergulhao > logout
+	USER LOGGED OUT
+```
+
+---
+
+# DESENVOLVEDOR
+
+### Editar nome de desenvolvedor corrente
+
+```
+sadmin > developer name
+NAME: Super Administrator
+	SIZE OVERFLOW
+sadmin > developer name
+NAME: S Administrator
+	USER NAME EDITED
+```
+### Editar senha de desenvolvedor corrente
+
+```
+sadministrator > developer password
+PASSWORD: 54321
+PASSWORD: 54321
+	USER PASSWORD EDITED
+```
+### Remover desenvolvedor
+
+```
+sadministrator > developer remove
+EMAIL: me@tmergulhao.com
+	USER REMOVED
+```
+
+---
+
+
+## PRODUTO
+
+
+### Adicionar
+
+```
+sadministrator > prod add
+PRODUCT NAME: Revisions
+PRODUCT CODE: aaaa
+PRODUCT VERSION: 00.00
+	NEW PRODUCT REGISTERED
+```
+### Editar nome
+
+```
+sadministrator > prod name
+PRODUCT NAME: Revisions DB
+PRODUCT CODE: aaaa
+	PRODUCT NAME EDITED
+```
+
+### Trocar administrador
+
+```
+sadministrator > prod assign
+PRODUCT CODE: aaaa
+EMAIL: mariana@gmail.com
+	DEVELOPER ASSIGNED
+```
+### Listar
+
+```
+sadministrator > prod list
+	Revisions DB
+		aaaa
+		00.00
+		mariana@gmail.com
+```
+
+### Remover
+
+```
+sadministrator > prod remove
+PRODUCT CODE: aaaa
+	PRODUCT REMOVED
+```
+## DEFEITO
+
+### Adicionar
+
+```
+sadministrator > defect add
+DEFECT NAME: Loop de linha de comando
+DEFECT DESCRIPTION: Concertar o loop de comando
+DEFECT CODE: aaaa
+DEFECT STATE: NEW
+PRODUCT CODE: aaaa
+	NEW DEFECT REGISTERED
+```
+
+### Listar
+
+```
+sadministrator > defect list
+PRODUCT CODE: aaaa
+	Loop de linha de comando	aaaa
+	DESCR	Concertar o loop de comando
+	DEVEL	NULL
+	VOTES	0
+	STATE	NEW
+	OPENI	Mon Dec  2 14:40:39 2013
+
+	CLOSE	NULL
+```
+### Mudar estado
+
+```
+sadministrator > defect state
+DEFECT CODE: aaaa
+DEFECT STATE: CONFIRMED
+	DEFECT STATE EDITED
+sadministrator > defect list
+PRODUCT CODE: aaaa
+	Loop de linha de comando	aaaa
+	DESCR	Concertar o loop de comando
+	DEVEL	NULL
+	VOTES	0
+	STATE	CONFIRMED
+	OPENI	Mon Dec  2 14:40:39 2013
+
+	CLOSE	NULL
+```
+### Editar nome
+
+```
+sadministrator > defect name
+DEFECT NAME: CLT Loop
+DEFECT CODE: aaaa
+	DEFECT NAME EDITED
+```
+
+### Candidatar-se a defeito
+
+```
+mcarvalho > defect candidate
+DEFECT CODE: aaaa
+	CANDIDATED TO DEFECT
+```
+### Trocar desenvolvedor
+
+```
+sadministrator > defect assign
+DEFECT CODE: aaaa
+EMAIL: me@tmergulhao.com
+	NO MANAGER CAN DEVELOP
+sadministrator > defect assign
+DEFECT CODE: aaaa
+EMAIL: mariana@gmail.com
+	DEFECT ASSIGNED
+```
+### Fechar
+
+```
+sadministrator > defect list
+PRODUCT CODE: aaaa
+	CLT Loop	aaaa
+	DESCR	Concertar o loop de comando
+	DEVEL	mariana@gmail.com
+	VOTES	0
+	STATE	CONFIRMED
+	OPENI	Mon Dec  2 14:40:39 2013
+
+	CLOSE	NULL
+
+sadministrator > defect remove
+DEFECT CODE: aaaa
+	DEFECT CLOSED
+sadministrator > defect list
+PRODUCT CODE: aaaa
+	CLT Loop	aaaa
+	DESCR	Concertar o loop de comando
+	DEVEL	mariana@gmail.com
+	VOTES	0
+	STATE	CONFIRMED
+	OPENI	Mon Dec  2 14:40:39 2013
+
+	CLOSE	Mon Dec  2 14:54:27 2013
+```

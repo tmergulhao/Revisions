@@ -415,7 +415,7 @@ void CLTUI::Parse_Product () {
 				
 				CONTROLLER::instance()->EditProductName(Prod);
 				
-				cout << ctab << "NEW PRODUCT REGISTERED";
+				cout << ctab << "PRODUCT NAME EDITED";
 			}
 			catch (invalid_argument error) {
 				cout << ctab << error.what();
@@ -434,7 +434,7 @@ void CLTUI::Parse_Product () {
 				
 				CONTROLLER::instance()->EditProductVersion(Prod);
 				
-				cout << ctab << "NEW PRODUCT REGISTERED";
+				cout << ctab << "PRODUCT VERSION EDITED";
 			}
 			catch (invalid_argument error) {
 				cout << ctab << error.what();
@@ -514,7 +514,7 @@ typedef enum {
 	DEFC_NAME		= (0x1 << 0),
 	D_DESCRIPTION	= (0x1 << 1),
 	D_CODE_INPUT	= (0x1 << 2),
-	D_STATE_INPUT	= (0x1 << 2)
+	D_STATE_INPUT	= (0x1 << 3)
 } DEFC_INPUT_MODES;
 
 void CLTUI::GetDefcFields (int mode) {
