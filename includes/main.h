@@ -1,6 +1,9 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+/**
+*	\brief Modos de execução do sistema.
+**/
 typedef enum {
 	TSTMODE		= (0x1 << 0),
 	CLTMODE		= (0x1 << 1),

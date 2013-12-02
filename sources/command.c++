@@ -170,18 +170,6 @@ class CLTUI: public MethaUI {
 		class password Pass;
 		class Product Prod;
 		class Defect Defct;
-	public:
-		CLTUI (int FLAGS) {
-			//TODO	MODIFY TO PRINT FULL SCOPE
-			PrintFile("welcome.txt");
-			
-			CONTROLLER::instance(FLAGS);
-			
-			if (FLAGS & TSTMODE) 
-				Word.Set("tst && q");
-		}
-		
-		void Run();
 		
 		void Parse ();
 		void Parse_Developer();
@@ -199,6 +187,18 @@ class CLTUI: public MethaUI {
 		void GetDevFields (int);
 		void GetProdFields (int);
 		void GetDefcFields (int);
+	public:
+		CLTUI (int FLAGS) {
+			//TODO	MODIFY TO PRINT FULL SCOPE
+			PrintFile("welcome.txt");
+			
+			CONTROLLER::instance(FLAGS);
+			
+			if (FLAGS & TSTMODE) 
+				Word.Set("tst && q");
+		}
+		
+		void Run();
 		
 		~CLTUI () {
 			delete CONTROLLER::instance();

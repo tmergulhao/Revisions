@@ -102,7 +102,7 @@ class password : public BaseType {
 ///////
 
 /**
-*	\brief Classe com alocação e avaliação de valores para código de produto.
+*	\brief Classe com alocação e avaliação de valores para código de produto ou defeito.
 *	
 *	Avalia o código quanto ao comprimento padrão, 4 dígitos que sejam:
 *	* letras do alfabeto sem acentuação maiúsculas ou minúsculas.
