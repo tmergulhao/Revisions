@@ -9,8 +9,8 @@ using namespace std;
 
 #define	BETWEEN(X,Y,Z)		(Y >= X && Y <= Z)
 
-#define NAME_SIZE	30
-#define EMAIL_SIZE	60
+#define NAME_SIZE	30 // 15
+#define EMAIL_SIZE	60 // 20
 #define PASS_SIZE	5
 
 //-----------------------------------------------------------------------
@@ -58,10 +58,12 @@ class BaseType {
 *	* espaços.
 **/
 class dev_name : public BaseType {
+		string shortname;
 	public:
 		void set (char *) throw (invalid_argument);
 		void set (const char *) throw (invalid_argument);
 		string get () { return value; }
+		string getshort ();
 };
 
 // EMAIL
@@ -90,6 +92,39 @@ class email : public BaseType {
 *	* caracteres não repetentes.
 **/
 class password : public BaseType {
+	public:
+		void set (char *) throw (invalid_argument);
+		void set (const char *) throw (invalid_argument);
+		string get () { return value; }
+};
+
+// CODE
+///////
+
+/**
+*	\brief Classe com alocação e avaliação de valores para código de produto.
+*	
+*	Avalia o código quanto ao comprimento padrão, 4 dígitos que sejam:
+*	* letras do alfabeto sem acentuação maiúsculas ou minúsculas.
+**/
+class code : public BaseType {
+	public:
+		void set (char *) throw (invalid_argument);
+		void set (const char *) throw (invalid_argument);
+		string get () { return value; }
+};
+
+// VERSION
+//////////
+
+/**
+*	\brief Classe com alocação e avaliação de valores para versão de produto.
+*	
+*	Avalia a versão quanto ao comprimento padrão, 5 dígitos que sejam:
+*	* números e letras do alfabeto sem acentuação maiúsculas ou minúsculas;
+*	* o dígito do meio é um separador '.'.
+**/
+class version : public BaseType {
 	public:
 		void set (char *) throw (invalid_argument);
 		void set (const char *) throw (invalid_argument);

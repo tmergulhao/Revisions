@@ -18,67 +18,40 @@
 ////////////
 
 class Developer {
-		// STACK OF PROJECTS METHATYPE
 	public:
 		class email email;
 		class dev_name name;
 		class password password;
-};
-
-/*
-
-// PROJECT
-//////////
-
-typedef enum {
-	UNCONFIRMED = 0,
-	CONFIRMED,
-	REPAIRING, // only for issues
-	DONE
-} methaproject_states;
-
-class methaproject {
-	protected:
-		char name[16];
-		struct tm opening;
-		struct tm cloding;
-		class developer* developer;
-		methaproject_states state;
-
-		//char * getname () {}
-		//char * getid () {}
-		//struct tm getopening () {}
-		//struct tm getclosing () {}
-		//char * getdescription () {}
-		//char * getdev () {}
-		// ...
+		
+		Developer () {}
+		Developer (const char *, const char *, const char *);
 };
 
 // DEFECT
+/////////
 
-class defect: public methaproject {
-		int votes; // de 0 a 100
-		char description[31];
-		class identifier* identifier;
+class Defect {
+	public:
+		string name;
+		string description; // 30 caracteres
+		email developer;
+		code id_code;
+		string votes; // de 0 a 100
+		string state;
+		string opening;
+		string closing;
+		code product;
 };
 
 // PRODUCT
+//////////
 
-class product: public methaproject {
-		// STACK OF DEFECTS
-		char version[]; // XX.YY
-};
-
-// PROJECT OR DATABASE
-
-class project: public methaproject {
-		// STACK OF PRODUCTS
-		// STACK OF DEVELOPERS
-		// DATABASE CONNECTIONS AND INTERFACES
+class Product {
 	public:
-		//product () {}		// call for database stablishment
-		// ~product () {}	// dumps data on to database
+		string name;
+		code id_code;
+		version version;
+		email developer;
 };
-*/
 
 #endif
