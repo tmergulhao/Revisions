@@ -1,12 +1,12 @@
 
       /\\\		
-     //\\\\	Welcome to Revisions.
+     //\\\\	Bem-vindo ao Revisions.
     ////\\\\	
-   ////  \\\\	Use ? to seek help.
+   ////  \\\\	Use ? para mostrar o manual.
   ////    \\\\
-  \\\\    ////	a .rev folder was created in your current
-   \\\\  ////	directory and will carry all data input
-    \\\\////	submited to Revisions.
+  \\\\    ////	Um banco de dados persistence.base foi
+   \\\\  ////	criado nesta pasta
+    \\\\////	
      \\\\//
       \\\/
 

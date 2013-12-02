@@ -1,27 +1,42 @@
-	quit			Quit Revisions.
+	quit			Sair do programa.
 	q
 	
-	help			View manual.
+	help			Ver este arquivo.
 	?
 	
-	test			Test enviroment.
+	test			Iniciar ambiente de testes.
+	tst
 	
-	list			List scope assets.
-	ls
-
-	checkout		Go up one level.
-	checkout *name*		Dive to asset.
-
-	issue			Add issue.
-	issue *code*		Review issue.
-	issue *code* *state*	Change issue state.
+	logout			Sair de conta usuário.
 	
-	user *email*		Add user of given email.
-	user *name*		Review user.
-	user *email* *name*	Change user name.
-	user *email* *pass*	Change user password.
-	logout			Log out of the system.
+	developer		Chamado para atividades de conta desenvolvedor.
+	dev
+		add			Adicionar desenvolvedor
+		password		Editar senha
+		name			Editar nome
+		remove			Remover desenvolvedor
 	
-	serve			Serve web user interface.
+	project			Chamado para atividades de ambiente.
+	proj
+		assign			Passar administração do sistema para outro desenvolvedor
 	
-	flush			Flush data into structure.
+	product			Chamado para atividades de produto.
+	prod
+		add		Adicionar produto
+		name			Edidar nome do produto
+		version			Editar versão do produto
+		assign			Assinalar desenvolvedor a produto
+		remove			Remover produto livre
+		list			Listar produtos
+	
+	
+	defect			Chamado para atividades de defeito.
+		add			Adicionar produto
+		name			Editar nome
+		description		Editar descrição
+		state			Editar estado
+		vote			Editar votos
+		assign			Assinalar desenvolvedor candidato a defeito
+		cadidate		Candidatar-se a defeito
+		remove			Remover defeito
+		list			Listar defeitos de produto

@@ -276,39 +276,39 @@ void CLTUI::Parse_Developer () {
 	}
 	else
 	
-	if (Word == "edit") {
-		if (Word == "name") {
-			if (! Word.Null()) SuggestManual();
-			else {
-				try {
-					GetDevFields(	NAME_INPUT);
-					
-					CONTROLLER::instance()->EditDevName(Dev.name);
-					
-					cout << ctab << "USER NAME EDITED";
-				}
-				catch (invalid_argument error) {
-					cout << ctab << error.what();
-				}
-				Word++;
+	if (Word == "name") {
+		if (! Word.Null()) SuggestManual();
+		else {
+			try {
+				GetDevFields(	NAME_INPUT);
+				
+				CONTROLLER::instance()->EditDevName(Dev.name);
+				
+				cout << ctab << "USER NAME EDITED";
 			}
+			catch (invalid_argument error) {
+				cout << ctab << error.what();
+			}
+			Word++;
 		}
-		if (Word == "password") {
-			if (! Word.Null()) SuggestManual();
-			else {
-				try {
-					GetDevFields(	PASS1_INPUT |
-									PASS2_INPUT);
-					
-					CONTROLLER::instance()->EditDevPassword(Dev.password);
-					
-					cout << ctab << "USER PASSWORD EDITED";
-				}
-				catch (invalid_argument error) {
-					cout << ctab << error.what();
-				}
-				Word++;
+	}
+	else
+	
+	if (Word == "password") {
+		if (! Word.Null()) SuggestManual();
+		else {
+			try {
+				GetDevFields(	PASS1_INPUT |
+								PASS2_INPUT);
+				
+				CONTROLLER::instance()->EditDevPassword(Dev.password);
+				
+				cout << ctab << "USER PASSWORD EDITED";
 			}
+			catch (invalid_argument error) {
+				cout << ctab << error.what();
+			}
+			Word++;
 		}
 	}
 	else
@@ -776,12 +776,9 @@ void CLTUI::Parse () {
 	
 	// SHOW HELP
 	if ((Word == "?") || 
-		(Word == "help") || 
-		(Word == "man") || 
-		(Word == "manual")) {
-			if (! Word->Nxt()) {
+		(Word == "help") ) {
+			if (Word.Null()) {
 				PrintFile("manual.txt");
-				Word->Kill();
 			}
 			else SuggestManual();
 		}
