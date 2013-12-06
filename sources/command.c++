@@ -30,12 +30,12 @@ class CommandWord {
 		char *word[WORDNUMBER], *walker;
 	
 		CommandWord (const char * input) {
-			walder = NULL;
+			walker = NULL;
 			Allocate();
 			Set(input);
 		}
 		CommandWord () {
-			walder = NULL;
+			walker = NULL;
 			Allocate();
 		}
 		~CommandWord () {
